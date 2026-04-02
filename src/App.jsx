@@ -3,7 +3,8 @@ import {
   Home, BookOpen, Shapes, Heart, Star, ArrowRight,
   Puzzle, Pencil, Calculator, Users, Plus, X, Loader2, FileText, Upload,
   LineChart, MessageCircle, Camera, Edit, Trash2, Lock, Unlock,
-  Briefcase, GraduationCap, Award, ChevronLeft, ChevronRight, Maximize2, Search
+  Briefcase, GraduationCap, Award, ChevronLeft, ChevronRight, Maximize2, Search,
+  Sun, Moon
 } from 'lucide-react';
 import { Client, Account, Databases, Storage, ID, Query } from 'appwrite';
 import ReactQuill from 'react-quill';
@@ -48,6 +49,24 @@ const getOptimizedUrl = (url, w, h, q = 80) => {
 export default function PortfolioDocente() {
   const [activeTab, setActiveTab] = useState('inicio');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [darkMode, setDarkMode] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('theme');
+      if (saved) return saved === 'dark';
+      return window.matchMedia('(prefers-color-scheme: dark)').matches;
+    }
+    return false;
+  });
+
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    }
+  }, [darkMode]);
 
   // Auth
   const [isAdmin, setIsAdmin] = useState(false);
@@ -556,51 +575,55 @@ export default function PortfolioDocente() {
 
 
   return (
-    <div className="min-h-screen bg-slate-50 font-sans text-slate-800 pb-20">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 font-sans text-slate-800 dark:text-slate-200 transition-colors duration-300 pb-20">
 
       {/* LOGIN MODAL */}
       {showLoginModal && (
         <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-8 relative animate-in fade-in zoom-in-95">
-            <button onClick={() => setShowLoginModal(false)} className="absolute top-4 right-4 text-slate-400 hover:text-slate-600"><X className="w-6 h-6" /></button>
-            <div className="flex justify-center mb-6"><div className="bg-indigo-100 p-3 rounded-full"><Lock className="w-8 h-8 text-indigo-600" /></div></div>
-            <h2 className="text-2xl font-bold text-center text-slate-800 mb-6">Acceso Docente</h2>
+          <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-xl w-full max-w-md p-8 relative animate-in fade-in zoom-in-95 border dark:border-slate-800">
+            <button onClick={() => setShowLoginModal(false)} className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"><X className="w-6 h-6" /></button>
+            <div className="flex justify-center mb-6"><div className="bg-indigo-100 dark:bg-indigo-900/30 p-3 rounded-full"><Lock className="w-8 h-8 text-indigo-600 dark:text-indigo-400" /></div></div>
+            <h2 className="text-2xl font-bold text-center text-slate-800 dark:text-slate-100 mb-6">Acceso Docente</h2>
             <form onSubmit={handleLogin} className="space-y-4">
-              {loginError && <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm text-center font-medium border border-red-100">{loginError}</div>}
+              {loginError && <div className="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 p-3 rounded-lg text-sm text-center font-medium border border-red-100 dark:border-red-900/30">{loginError}</div>}
               <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-1">Email</label>
-                <input type="email" required value={loginCreds.email} onChange={e => setLoginCreds({...loginCreds, email: e.target.value})} className="w-full border border-slate-300 rounded-lg p-3 focus:ring-2 focus:ring-indigo-500" />
+                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1">Email</label>
+                <input type="email" required value={loginCreds.email} onChange={e => setLoginCreds({...loginCreds, email: e.target.value})} className="w-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 rounded-lg p-3 focus:ring-2 focus:ring-indigo-500 outline-none" />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-1">Contraseña</label>
-                <input type="password" required value={loginCreds.password} onChange={e => setLoginCreds({...loginCreds, password: e.target.value})} className="w-full border border-slate-300 rounded-lg p-3 focus:ring-2 focus:ring-indigo-500" placeholder="••••••••" />
+                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1">Contraseña</label>
+                <input type="password" required value={loginCreds.password} onChange={e => setLoginCreds({...loginCreds, password: e.target.value})} className="w-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 rounded-lg p-3 focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="••••••••" />
               </div>
-              <button type="submit" className="w-full bg-indigo-600 text-white font-bold py-3 rounded-xl hover:bg-indigo-700 mt-2">Iniciar Sesión</button>
+              <button type="submit" className="w-full bg-indigo-600 dark:bg-indigo-500 text-white font-bold py-3 rounded-xl hover:bg-indigo-700 dark:hover:bg-indigo-600 transition-colors mt-2">Iniciar Sesión</button>
             </form>
           </div>
         </div>
       )}
 
       {/* BRAND HEADER (TOP BAR) */}
-      <header className="bg-white border-b border-slate-100">
+      <header className="bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800 transition-colors">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="flex items-center gap-4 cursor-pointer group" onClick={() => setActiveTab('inicio')}>
-             <div className="bg-indigo-600 p-2.5 rounded-2xl shadow-indigo-100 shadow-xl group-hover:scale-110 transition-transform"><Star className="w-8 h-8 text-white" /></div>
+             <div className="bg-indigo-600 p-2.5 rounded-2xl shadow-indigo-100 dark:shadow-none shadow-xl group-hover:scale-110 transition-transform"><Star className="w-8 h-8 text-white" /></div>
              <div>
-               <h1 className="text-2xl font-black text-slate-900 tracking-tight leading-none mb-1">Mi Aula Dinámica</h1>
-               <p className="text-sm font-bold text-indigo-600 uppercase tracking-widest flex items-center gap-2">
-                 1º Ciclo Primaria <span className="w-1.5 h-1.5 rounded-full bg-slate-300"></span> CEIP La Arboleda
+               <h1 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight leading-none mb-1 text-center md:text-left">Mi Aula Dinámica</h1>
+               <p className="text-sm font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest flex items-center gap-2 justify-center md:justify-start">
+                 1º Ciclo Primaria <span className="w-1.5 h-1.5 rounded-full bg-slate-300 dark:bg-slate-600"></span> CEIP La Arboleda
                </p>
              </div>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
+             <button onClick={() => setDarkMode(!darkMode)} className="p-2.5 text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 rounded-xl transition-all border border-transparent flex items-center gap-2 text-sm font-bold group" title={darkMode ? 'Modo Claro' : 'Modo Oscuro'}>
+                {darkMode ? <Sun className="w-5 h-5 text-amber-500" /> : <Moon className="w-5 h-5" />}
+             </button>
+             <div className="w-px h-6 bg-slate-200 dark:bg-slate-700 mx-1 hidden sm:block"></div>
              {isAdmin ? (
-                <button onClick={handleLogout} className="flex items-center gap-2 bg-emerald-50 text-emerald-700 px-4 py-2 rounded-xl font-bold border border-emerald-100 hover:bg-emerald-100 transition-colors shadow-sm">
-                  <Unlock className="w-4 h-4" /> <span>Cerrar Sesión</span>
+                <button onClick={handleLogout} className="flex items-center gap-2 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400 px-4 py-2 rounded-xl font-bold border border-emerald-100 dark:border-emerald-900/30 hover:bg-emerald-100 dark:hover:bg-emerald-900/40 transition-colors shadow-sm">
+                  <Unlock className="w-4 h-4" /> <span className="hidden sm:inline">Cerrar Sesión</span>
                 </button>
              ) : (
-                <button onClick={() => setShowLoginModal(true)} className="p-2.5 text-slate-400 hover:bg-white hover:text-indigo-600 hover:border-indigo-100 rounded-xl transition-all border border-transparent flex items-center gap-2 text-sm font-bold group">
-                  <Lock className="w-5 h-5 group-hover:rotate-12 transition-transform" /> <span>Acceso</span>
+                <button onClick={() => setShowLoginModal(true)} className="p-2.5 text-slate-400 hover:bg-white dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 rounded-xl transition-all border border-transparent flex items-center gap-2 text-sm font-bold group">
+                  <Lock className="w-5 h-5 group-hover:rotate-12 transition-transform" /> <span className="hidden sm:inline">Acceso</span>
                 </button>
              )}
           </div>
@@ -608,7 +631,7 @@ export default function PortfolioDocente() {
       </header>
 
       {/* STICKY NAV BAR */}
-      <nav className="sticky top-0 z-50 bg-white/90 backdrop-blur-xl border-b border-slate-200 shadow-sm overflow-x-auto scrollbar-hide">
+      <nav className="sticky top-0 z-50 bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border-b border-slate-200 dark:border-slate-800 shadow-sm overflow-x-auto scrollbar-hide transition-colors">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between md:justify-center h-16 sm:h-20">
             <div className="hidden md:flex items-center gap-1 w-full justify-between">
@@ -653,8 +676,8 @@ export default function PortfolioDocente() {
 
         {/* INICIO */}
         {activeTab === 'inicio' && (
-          <div className="space-y-12 animate-in fade-in duration-500">
-            <div className="bg-indigo-900 rounded-3xl overflow-hidden shadow-xl relative">
+          <div className="space-y-12 animate-in fade-in duration-700">
+            <div className="bg-indigo-900 dark:bg-indigo-950 rounded-3xl overflow-hidden shadow-xl relative transition-colors">
               <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-indigo-300 via-transparent to-transparent"></div>
               <div className="px-8 py-10 sm:px-16 sm:py-16 relative z-10 flex flex-col md:flex-row items-center gap-12">
                 <div className="flex-1 space-y-6">
@@ -663,7 +686,7 @@ export default function PortfolioDocente() {
                       <Unlock className="w-4 h-4"/> Modo Administrador Activo
                     </span>
                   ) : (
-                    <span className="inline-block py-1 px-3 rounded-full bg-slate-700 text-slate-200 text-sm font-semibold tracking-wide border border-slate-600 shadow-sm flex items-center w-fit gap-1">
+                    <span className="inline-block py-1 px-3 rounded-full bg-slate-700 dark:bg-slate-800 text-slate-200 text-sm font-semibold tracking-wide border border-slate-600 shadow-sm flex items-center w-fit gap-1">
                       <Users className="w-4 h-4"/> Vista Pública
                     </span>
                   )}
@@ -676,17 +699,17 @@ export default function PortfolioDocente() {
               </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-start gap-4">
-                <div className="p-3 bg-blue-50 text-blue-600 rounded-xl"><Users className="w-6 h-6" /></div>
-                <div><h3 className="font-bold text-slate-800 text-lg">Inclusión Real</h3><p className="text-slate-500 text-sm mt-1">Materiales multinivel adaptados al Diseño Universal para el Aprendizaje (DUA).</p></div>
+              <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 flex items-start gap-4 transition-colors">
+                <div className="p-3 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-xl"><Users className="w-6 h-6" /></div>
+                <div><h3 className="font-bold text-slate-800 dark:text-white text-lg">Inclusión Real</h3><p className="text-slate-500 dark:text-slate-400 text-sm mt-1">Materiales multinivel adaptados al Diseño Universal para el Aprendizaje (DUA).</p></div>
               </div>
-              <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-start gap-4">
-                <div className="p-3 bg-emerald-50 text-emerald-600 rounded-xl"><Heart className="w-6 h-6" /></div>
-                <div><h3 className="font-bold text-slate-800 text-lg">Autonomía</h3><p className="text-slate-500 text-sm mt-1">El alumnado es protagonista, fomentando la responsabilidad y la ayuda entre iguales.</p></div>
+              <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 flex items-start gap-4 transition-colors">
+                <div className="p-3 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 rounded-xl"><Heart className="w-6 h-6" /></div>
+                <div><h3 className="font-bold text-slate-800 dark:text-white text-lg">Autonomía</h3><p className="text-slate-500 dark:text-slate-400 text-sm mt-1">El alumnado es protagonista, fomentando la responsabilidad y la ayuda entre iguales.</p></div>
               </div>
-              <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-start gap-4">
-                <div className="p-3 bg-amber-50 text-amber-600 rounded-xl"><Puzzle className="w-6 h-6" /></div>
-                <div><h3 className="font-bold text-slate-800 text-lg">Manipulativo</h3><p className="text-slate-500 text-sm mt-1">Aprender tocando y experimentando, respetando la etapa evolutiva del primer ciclo.</p></div>
+              <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 flex items-start gap-4 transition-colors">
+                <div className="p-3 bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 rounded-xl"><Puzzle className="w-6 h-6" /></div>
+                <div><h3 className="font-bold text-slate-800 dark:text-white text-lg">Manipulativo</h3><p className="text-slate-500 dark:text-slate-400 text-sm mt-1">Aprender tocando y experimentando, respetando la etapa evolutiva del primer ciclo.</p></div>
               </div>
             </div>
           </div>
@@ -698,11 +721,11 @@ export default function PortfolioDocente() {
           <div className="space-y-8 animate-in fade-in duration-500">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
               <div>
-                <h2 className="text-3xl font-extrabold text-slate-900">Trayectoria y Equipo</h2>
-                <p className="text-slate-600 mt-2">Mi experiencia, formación y los docentes que hacen posible este proyecto.</p>
+                <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white">Trayectoria y Equipo</h2>
+                <p className="text-slate-600 dark:text-slate-400 mt-2">Mi experiencia, formación y los docentes que hacen posible este proyecto.</p>
               </div>
               {isAdmin && (
-                <button onClick={() => setShowTrayectoriaForm(true)} className="bg-indigo-600 text-white px-5 py-2.5 rounded-xl font-bold hover:bg-indigo-700 transition-colors flex items-center gap-2 shadow-md shrink-0">
+                <button onClick={() => setShowTrayectoriaForm(true)} className="bg-indigo-600 dark:bg-indigo-500 text-white px-5 py-2.5 rounded-xl font-bold hover:bg-indigo-700 dark:hover:bg-indigo-600 transition-all flex items-center gap-2 shadow-md shrink-0">
                   <Plus className="w-5 h-5" /> Añadir Hito / Miembro
                 </button>
               )}
@@ -740,34 +763,34 @@ export default function PortfolioDocente() {
                 </button>
               </form>
             )}
-            <div className="bg-white p-8 rounded-3xl shadow-sm border border-slate-200">
+            <div className="bg-white dark:bg-slate-900 p-8 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-800 transition-colors">
               {trayectoria.length === 0 ? (
-                <p className="text-slate-500 italic text-center py-8">Aún no hay hitos ni equipo añadidos.</p>
+                <p className="text-slate-500 dark:text-slate-400 italic text-center py-8">Aún no hay hitos ni equipo añadidos.</p>
               ) : (
-                <div className="relative border-l-2 border-slate-100 ml-3 pl-6 space-y-10 py-2">
+                <div className="relative border-l-2 border-slate-100 dark:border-slate-800 ml-3 pl-6 space-y-10 py-2">
                   {trayectoria.map(item => {
-                    let Icono = Briefcase, colorConfig = 'text-indigo-600 bg-indigo-100 ring-indigo-50';
-                    if (item.categoria === 'Formación') { Icono = GraduationCap; colorConfig = 'text-emerald-600 bg-emerald-100 ring-emerald-50'; }
-                    else if (item.categoria === 'Reconocimientos') { Icono = Award; colorConfig = 'text-amber-600 bg-amber-100 ring-amber-50'; }
-                    else if (item.categoria === 'Equipo Docente') { Icono = Users; colorConfig = 'text-pink-600 bg-pink-100 ring-pink-50'; }
-                    else if (item.categoria === 'Otro') { Icono = Star; colorConfig = 'text-blue-600 bg-blue-100 ring-blue-50'; }
+                    let Icono = Briefcase, colorConfig = 'text-indigo-600 bg-indigo-100 ring-indigo-50 dark:text-indigo-400 dark:bg-indigo-900/30 dark:ring-indigo-950';
+                    if (item.categoria === 'Formación') { Icono = GraduationCap; colorConfig = 'text-emerald-600 bg-emerald-100 ring-emerald-50 dark:text-emerald-400 dark:bg-emerald-900/30 dark:ring-emerald-950'; }
+                    else if (item.categoria === 'Reconocimientos') { Icono = Award; colorConfig = 'text-amber-600 bg-amber-100 ring-amber-50 dark:text-amber-400 dark:bg-amber-900/30 dark:ring-amber-950'; }
+                    else if (item.categoria === 'Equipo Docente') { Icono = Users; colorConfig = 'text-pink-600 bg-pink-100 ring-pink-50 dark:text-pink-400 dark:bg-pink-900/30 dark:ring-pink-950'; }
+                    else if (item.categoria === 'Otro') { Icono = Star; colorConfig = 'text-blue-600 bg-blue-100 ring-blue-50 dark:text-blue-400 dark:bg-blue-900/30 dark:ring-blue-950'; }
                     const [textColor, bgColor, ringColor] = colorConfig.split(' ');
                     return (
                       <div key={item.$id} className="relative group">
-                        <div className={`absolute -left-[2.1rem] top-1 w-8 h-8 rounded-full ring-4 ring-white flex items-center justify-center shadow-sm ${bgColor} ${ringColor}`}>
+                        <div className={`absolute -left-[2.1rem] top-1 w-8 h-8 rounded-full ring-4 ring-white dark:ring-slate-900 flex items-center justify-center shadow-sm ${bgColor} ${ringColor} transition-colors`}>
                           <Icono className={`w-4 h-4 ${textColor}`} />
                         </div>
                         {isAdmin && (
-                          <div className="absolute top-0 right-0 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity bg-white/90 p-1 rounded-lg">
-                            <button onClick={() => triggerEditTrayectoria(item)} className="p-1.5 text-slate-400 hover:text-indigo-600 transition-colors"><Edit className="w-4 h-4" /></button>
-                            <button onClick={() => handleDeleteTrayectoria(item.$id)} className="p-1.5 text-slate-400 hover:text-red-600 transition-colors"><Trash2 className="w-4 h-4" /></button>
+                          <div className="absolute top-0 right-0 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity bg-white/90 dark:bg-slate-800/90 p-1 rounded-lg">
+                            <button onClick={() => triggerEditTrayectoria(item)} className="p-1.5 text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"><Edit className="w-4 h-4" /></button>
+                            <button onClick={() => handleDeleteTrayectoria(item.$id)} className="p-1.5 text-slate-400 hover:text-red-600 dark:hover:text-red-400 transition-colors"><Trash2 className="w-4 h-4" /></button>
                           </div>
                         )}
                         <div className="pr-16">
-                          <span className="text-sm font-bold text-slate-400 uppercase tracking-wider">{item.fecha}</span>
-                          <h3 className="text-xl font-bold text-slate-800 mt-1">{item.titulo}</h3>
-                          <h4 className="text-md font-semibold text-indigo-600 mb-2">{item.subtitulo}</h4>
-                          {item.descripcion && <p className="text-slate-600 leading-relaxed text-sm">{item.descripcion}</p>}
+                          <span className="text-sm font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">{item.fecha}</span>
+                          <h3 className="text-xl font-bold text-slate-800 dark:text-white mt-1">{item.titulo}</h3>
+                          <h4 className="text-md font-semibold text-indigo-600 dark:text-indigo-400 mb-2">{item.subtitulo}</h4>
+                          {item.descripcion && <p className="text-slate-600 dark:text-slate-400 leading-relaxed text-sm">{item.descripcion}</p>}
                         </div>
                       </div>
                     );
@@ -782,24 +805,24 @@ export default function PortfolioDocente() {
         {activeTab === 'metodologia' && (
           <div className="space-y-10 animate-in fade-in duration-500">
             <div className="max-w-3xl">
-              <h2 className="text-3xl font-extrabold text-slate-900 mb-4">El Motor de Nuestra Aula</h2>
-              <p className="text-lg text-slate-600 leading-relaxed">Trabajar por estaciones no es solo organizar mesas diferentes; es una profunda transformación metodológica basada en la equidad y el respeto a la diversidad.</p>
+              <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white mb-4">El Motor de Nuestra Aula</h2>
+              <p className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed">Trabajar por estaciones no es solo organizar mesas diferentes; es una profunda transformación metodológica basada en la equidad y el respeto a la diversidad.</p>
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              <div className="bg-white p-8 rounded-3xl shadow-sm border border-slate-200">
-                <h3 className="text-2xl font-bold text-indigo-600 mb-4">¿En qué consiste?</h3>
-                <p className="text-slate-600 leading-relaxed text-justify mb-4">El proyecto consiste en la implementación de 'Estaciones de Aprendizaje' en el 1º ciclo de Primaria como respuesta inclusiva a la diversidad del aula.</p>
-                <p className="text-slate-600 leading-relaxed text-justify">Esta práctica transforma el aula tradicional en un ecosistema flexible que respeta los diferentes ritmos madurativos, garantizando la participación y el éxito de todo el grupo.</p>
+              <div className="bg-white dark:bg-slate-900 p-8 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-800 transition-colors">
+                <h3 className="text-2xl font-bold text-indigo-600 dark:text-indigo-400 mb-4">¿En qué consiste?</h3>
+                <p className="text-slate-600 dark:text-slate-400 leading-relaxed text-justify mb-4">El proyecto consiste en la implementación de 'Estaciones de Aprendizaje' en el 1º ciclo de Primaria como respuesta inclusiva a la diversidad del aula.</p>
+                <p className="text-slate-600 dark:text-slate-400 leading-relaxed text-justify">Esta práctica transforma el aula tradicional en un ecosistema flexible que respeta los diferentes ritmos madurativos, garantizando la participación y el éxito de todo el grupo.</p>
               </div>
-              <div className="bg-white p-8 rounded-3xl shadow-sm border border-slate-200">
-                <h3 className="text-2xl font-bold text-indigo-600 mb-4">¿Cómo funciona?</h3>
-                <p className="text-slate-600 leading-relaxed text-justify mb-4">El aula se organiza dinámicamente en 5 estaciones simultáneas con propuestas multinivel, diseñadas bajo el DUA:</p>
+              <div className="bg-white dark:bg-slate-900 p-8 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-800 transition-colors">
+                <h3 className="text-2xl font-bold text-indigo-600 dark:text-indigo-400 mb-4">¿Cómo funciona?</h3>
+                <p className="text-slate-600 dark:text-slate-400 leading-relaxed text-justify mb-4">El aula se organiza dinámicamente en 5 estaciones simultáneas con propuestas multinivel, diseñadas bajo el DUA:</p>
                 <ul className="space-y-3 mb-6">
-                  <li className="flex items-start gap-2"><div className="w-2 h-2 rounded-full bg-indigo-500 mt-1.5 shrink-0"></div><span className="text-slate-700 text-sm"><strong className="text-indigo-900">Juego simbólico:</strong> Desarrollo social, roles y lenguaje oral.</span></li>
-                  <li className="flex items-start gap-2"><div className="w-2 h-2 rounded-full bg-pink-500 mt-1.5 shrink-0"></div><span className="text-slate-700 text-sm"><strong className="text-pink-900">Lecto-escritura:</strong> Conciencia fonológica, trazo, lectura y comprensión.</span></li>
-                  <li className="flex items-start gap-2"><div className="w-2 h-2 rounded-full bg-blue-500 mt-1.5 shrink-0"></div><span className="text-slate-700 text-sm"><strong className="text-blue-900">Lógico-matemática:</strong> Numeración, cálculo manipulativo y problemas.</span></li>
-                  <li className="flex items-start gap-2"><div className="w-2 h-2 rounded-full bg-amber-500 mt-1.5 shrink-0"></div><span className="text-slate-700 text-sm"><strong className="text-amber-900">Mentalandia:</strong> Funciones ejecutivas, atención, memoria y retos espaciales.</span></li>
-                  <li className="flex items-start gap-2"><div className="w-2 h-2 rounded-full bg-emerald-500 mt-1.5 shrink-0"></div><span className="text-slate-700 text-sm"><strong className="text-emerald-900">Sabiómetro (Dirigida):</strong> Evaluación de progresos, refuerzo directo o ampliación.</span></li>
+                  <li className="flex items-start gap-2"><div className="w-2 h-2 rounded-full bg-indigo-500 mt-1.5 shrink-0"></div><span className="text-slate-700 dark:text-slate-300 text-sm"><strong className="text-indigo-900 dark:text-indigo-400">Juego simbólico:</strong> Desarrollo social, roles y lenguaje oral.</span></li>
+                  <li className="flex items-start gap-2"><div className="w-2 h-2 rounded-full bg-pink-500 mt-1.5 shrink-0"></div><span className="text-slate-700 dark:text-slate-300 text-sm"><strong className="text-pink-900 dark:text-pink-400">Lecto-escritura:</strong> Conciencia fonológica, trazo, lectura y comprensión.</span></li>
+                  <li className="flex items-start gap-2"><div className="w-2 h-2 rounded-full bg-blue-500 mt-1.5 shrink-0"></div><span className="text-slate-700 dark:text-slate-300 text-sm"><strong className="text-blue-900 dark:text-blue-400">Lógico-matemática:</strong> Numeración, cálculo manipulativo y problemas.</span></li>
+                  <li className="flex items-start gap-2"><div className="w-2 h-2 rounded-full bg-amber-500 mt-1.5 shrink-0"></div><span className="text-slate-700 dark:text-slate-300 text-sm"><strong className="text-amber-900 dark:text-amber-400">Mentalandia:</strong> Funciones ejecutivas, atención, memoria y retos espaciales.</span></li>
+                  <li className="flex items-start gap-2"><div className="w-2 h-2 rounded-full bg-emerald-500 mt-1.5 shrink-0"></div><span className="text-slate-700 dark:text-slate-300 text-sm"><strong className="text-emerald-900 dark:text-emerald-400">Sabiómetro (Dirigida):</strong> Evaluación de progresos, refuerzo directo o ampliación.</span></li>
                 </ul>
               </div>
               <div className="bg-slate-900 text-white p-8 sm:p-12 rounded-3xl shadow-md lg:col-span-2 relative overflow-hidden">
@@ -836,8 +859,8 @@ export default function PortfolioDocente() {
           <div className="space-y-8 animate-in fade-in duration-500">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
               <div>
-                <h2 className="text-3xl font-extrabold text-slate-900">Banco de Materiales</h2>
-                <p className="text-slate-600 mt-2">Recursos organizados por categorías.</p>
+                <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white">Banco de Materiales</h2>
+                <p className="text-slate-600 dark:text-slate-400 mt-2">Recursos organizados por categorías.</p>
               </div>
               {isAdmin && (
                 <button onClick={() => setShowMaterialForm(true)} className="bg-indigo-600 text-white px-5 py-2.5 rounded-xl font-bold hover:bg-indigo-700 transition-colors flex items-center gap-2 shadow-md">
@@ -846,14 +869,14 @@ export default function PortfolioDocente() {
               )}
             </div>
             {!showMaterialForm && materiales.length > 0 && (
-              <div className="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 mb-6 flex flex-col lg:flex-row gap-4">
+              <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 mb-6 flex flex-col lg:flex-row gap-4 transition-colors">
                 <div className="relative flex-1">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
-                  <input type="text" placeholder="Buscar materiales..." value={searchTermMaterial} onChange={e => setSearchTermMaterial(e.target.value)} className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none" />
+                  <input type="text" placeholder="Buscar materiales..." value={searchTermMaterial} onChange={e => setSearchTermMaterial(e.target.value)} className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:ring-2 focus:ring-indigo-500 outline-none transition-colors" />
                 </div>
                 <div className="flex gap-2 overflow-x-auto pb-2 lg:pb-0 scrollbar-hide">
                   {['Todas','Juego simbólico','Lecto-escritura','Lógico-matemática','Mentalandia','Sabiómetro'].map(cat => (
-                    <button key={cat} onClick={() => setFilterCategoriaMaterial(cat)} className={`px-4 py-2.5 rounded-xl whitespace-nowrap text-sm font-semibold transition-all ${filterCategoriaMaterial === cat ? 'bg-indigo-600 text-white shadow-md' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}>{cat}</button>
+                    <button key={cat} onClick={() => setFilterCategoriaMaterial(cat)} className={`px-4 py-2.5 rounded-xl whitespace-nowrap text-sm font-semibold transition-all ${filterCategoriaMaterial === cat ? 'bg-indigo-600 text-white shadow-md' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700'}`}>{cat}</button>
                   ))}
                 </div>
               </div>
@@ -907,23 +930,23 @@ export default function PortfolioDocente() {
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {filteredMateriales.slice(0, visibleMateriales).map(mat => (
-                  <div key={mat.$id} className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden flex flex-col sm:flex-row hover:shadow-md transition-shadow relative group">
+                  <div key={mat.$id} className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden flex flex-col sm:flex-row hover:shadow-md transition-all relative group">
                     {isAdmin && (
-                      <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity bg-white/90 p-1 rounded-lg shadow-sm">
-                        <button onClick={() => triggerEditMaterial(mat)} className="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-md transition-colors"><Edit className="w-4 h-4" /></button>
-                        <button onClick={() => handleDeleteMaterial(mat.$id)} className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors"><Trash2 className="w-4 h-4" /></button>
+                      <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity bg-white/90 dark:bg-slate-800/90 p-1 rounded-lg shadow-sm">
+                        <button onClick={() => triggerEditMaterial(mat)} className="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900 rounded-md transition-colors"><Edit className="w-4 h-4" /></button>
+                        <button onClick={() => handleDeleteMaterial(mat.$id)} className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900 rounded-md transition-colors"><Trash2 className="w-4 h-4" /></button>
                       </div>
                     )}
-                    <div className={`sm:w-32 flex-shrink-0 flex items-center justify-center p-6 ${getCategoryColor(mat.categoria)} border-b sm:border-b-0 sm:border-r`}>{getCategoryIcon(mat.categoria)}</div>
+                    <div className={`sm:w-32 flex-shrink-0 flex items-center justify-center p-6 ${getCategoryColor(mat.categoria)} dark:opacity-90 border-b sm:border-b-0 sm:border-r dark:border-slate-800 transition-colors`}>{getCategoryIcon(mat.categoria)}</div>
                     <div className="p-6 flex-1 flex flex-col justify-center">
                       <div className="flex justify-between items-start gap-4 mb-1">
-                        <span className="text-xs font-bold uppercase tracking-wider text-slate-400">{mat.categoria}</span>
-                        {mat.$createdAt && <span className="text-xs font-bold text-slate-400 shrink-0">{new Date(mat.$createdAt).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })}</span>}
+                        <span className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">{mat.categoria}</span>
+                        {mat.$createdAt && <span className="text-xs font-bold text-slate-400 dark:text-slate-500 shrink-0">{new Date(mat.$createdAt).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })}</span>}
                       </div>
-                      <h3 className="text-xl font-bold text-slate-800 mb-2 pr-12 lg:pr-0">{mat.titulo}</h3>
-                      <p className="text-slate-600 text-sm leading-relaxed mb-3">{mat.descripcion}</p>
+                      <h3 className="text-xl font-bold text-slate-800 dark:text-white mb-2 pr-12 lg:pr-0">{mat.titulo}</h3>
+                      <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-3">{mat.descripcion}</p>
                       {mat.archivoUrl && (
-                        <a href={mat.archivoUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-sm font-bold text-indigo-600 hover:text-indigo-800 w-fit bg-indigo-50 px-3 py-1.5 rounded-lg transition-colors mt-auto">
+                        <a href={mat.archivoUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-sm font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 w-fit bg-indigo-50 dark:bg-indigo-900/40 px-3 py-1.5 rounded-lg transition-colors mt-auto">
                           <FileText className="w-4 h-4" /> Ver {mat.archivoNombre || 'PDF'}
                         </a>
                       )}
@@ -947,8 +970,8 @@ export default function PortfolioDocente() {
           <div className="space-y-10 animate-in fade-in duration-500">
             <div className="flex justify-between items-start sm:items-center gap-4">
               <div>
-                <h2 className="text-3xl font-extrabold text-slate-900">Evaluación y Evidencias</h2>
-                <p className="text-slate-600 mt-2 text-lg">Cómo medimos el progreso respetando los ritmos de cada alumno.</p>
+                <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white">Evaluación y Evidencias</h2>
+                <p className="text-slate-600 dark:text-slate-400 mt-2 text-lg">Cómo medimos el progreso respetando los ritmos de cada alumno.</p>
               </div>
               {isAdmin && (
                 <button onClick={() => setShowEvaluacionForm(true)} className="bg-indigo-600 text-white px-5 py-2.5 rounded-xl font-bold hover:bg-indigo-700 transition-colors flex items-center gap-2 shadow-md">
@@ -987,20 +1010,20 @@ export default function PortfolioDocente() {
             )}
             {!showEvaluacionForm && evaluaciones.length > 0 && (
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8 mt-2">
-                <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl flex items-center gap-4 relative overflow-hidden group">
-                  <div className="absolute -right-4 -bottom-4 opacity-5 group-hover:scale-110 transition-transform"><LineChart className="w-32 h-32 text-indigo-900" /></div>
-                  <div className="bg-indigo-100 p-4 rounded-xl text-indigo-600 relative z-10"><LineChart className="w-8 h-8"/></div>
-                  <div className="relative z-10"><p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Total Rúbricas</p><p className="text-3xl font-extrabold text-slate-800">{evaluaciones.length}</p></div>
+                <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm p-6 rounded-2xl flex items-center gap-4 relative overflow-hidden group transition-colors">
+                  <div className="absolute -right-4 -bottom-4 opacity-5 group-hover:scale-110 transition-transform"><LineChart className="w-32 h-32 text-indigo-900 dark:text-indigo-100" /></div>
+                  <div className="bg-indigo-100 dark:bg-indigo-900/50 p-4 rounded-xl text-indigo-600 dark:text-indigo-400 relative z-10"><LineChart className="w-8 h-8"/></div>
+                  <div className="relative z-10"><p className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-1">Total Rúbricas</p><p className="text-3xl font-extrabold text-slate-800 dark:text-white">{evaluaciones.length}</p></div>
                 </div>
-                <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl flex items-center gap-4 relative overflow-hidden group">
-                  <div className="absolute -right-4 -bottom-4 opacity-5 group-hover:scale-110 transition-transform"><FileText className="w-32 h-32 text-emerald-900" /></div>
-                  <div className="bg-emerald-100 p-4 rounded-xl text-emerald-600 relative z-10"><FileText className="w-8 h-8"/></div>
-                  <div className="relative z-10"><p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Documentos</p><p className="text-3xl font-extrabold text-slate-800">{evaluaciones.filter(e => e.archivoUrl).length}</p></div>
+                <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm p-6 rounded-2xl flex items-center gap-4 relative overflow-hidden group transition-colors">
+                  <div className="absolute -right-4 -bottom-4 opacity-5 group-hover:scale-110 transition-transform"><FileText className="w-32 h-32 text-emerald-900 dark:text-emerald-100" /></div>
+                  <div className="bg-emerald-100 dark:bg-emerald-900/50 p-4 rounded-xl text-emerald-600 dark:text-emerald-400 relative z-10"><FileText className="w-8 h-8"/></div>
+                  <div className="relative z-10"><p className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-1">Documentos</p><p className="text-3xl font-extrabold text-slate-800 dark:text-white">{evaluaciones.filter(e => e.archivoUrl).length}</p></div>
                 </div>
-                <div className="bg-white border border-slate-200 shadow-sm p-6 rounded-2xl flex items-center gap-4 relative overflow-hidden group">
-                  <div className="absolute -right-4 -bottom-4 opacity-5 group-hover:scale-110 transition-transform"><Award className="w-32 h-32 text-amber-900" /></div>
-                  <div className="bg-amber-100 p-4 rounded-xl text-amber-600 relative z-10"><Award className="w-8 h-8"/></div>
-                  <div className="relative z-10"><p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Última Alta</p><p className="text-lg font-bold text-slate-800">{evaluaciones[0]?.$createdAt ? new Date(evaluaciones[0].$createdAt).toLocaleDateString('es-ES', { month: 'short', day: 'numeric', year: 'numeric'}) : '-'}</p></div>
+                <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm p-6 rounded-2xl flex items-center gap-4 relative overflow-hidden group transition-colors">
+                  <div className="absolute -right-4 -bottom-4 opacity-5 group-hover:scale-110 transition-transform"><Award className="w-32 h-32 text-amber-900 dark:text-amber-100" /></div>
+                  <div className="bg-amber-100 dark:bg-amber-900/50 p-4 rounded-xl text-amber-600 dark:text-amber-400 relative z-10"><Award className="w-8 h-8"/></div>
+                  <div className="relative z-10"><p className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-1">Última Alta</p><p className="text-lg font-bold text-slate-800 dark:text-white">{evaluaciones[0]?.$createdAt ? new Date(evaluaciones[0].$createdAt).toLocaleDateString('es-ES', { month: 'short', day: 'numeric', year: 'numeric'}) : '-'}</p></div>
                 </div>
               </div>
             )}
@@ -1018,10 +1041,10 @@ export default function PortfolioDocente() {
                           <button onClick={() => handleDeleteEvaluacion(ev.$id)} className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors"><Trash2 className="w-4 h-4" /></button>
                         </div>
                       )}
-                      <h4 className="font-bold text-slate-800 mb-1 pr-16">{ev.titulo}</h4>
-                      {ev.descripcion && <p className="text-sm text-slate-600 mb-4">{ev.descripcion}</p>}
+                      <h4 className="font-bold text-slate-800 dark:text-white mb-1 pr-16">{ev.titulo}</h4>
+                      {ev.descripcion && <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">{ev.descripcion}</p>}
                       {ev.archivoUrl && (
-                        <a href={ev.archivoUrl} target="_blank" rel="noopener noreferrer" className="mt-auto inline-flex items-center gap-1.5 text-sm font-bold text-emerald-600 hover:text-emerald-800 bg-emerald-50 px-3 py-2 rounded-lg w-fit transition-colors">
+                        <a href={ev.archivoUrl} target="_blank" rel="noopener noreferrer" className="mt-auto inline-flex items-center gap-1.5 text-sm font-bold text-emerald-600 dark:text-emerald-400 hover:text-emerald-800 dark:hover:text-emerald-300 bg-emerald-50 dark:bg-emerald-900/40 px-3 py-2 rounded-lg w-fit transition-colors">
                           <FileText className="w-4 h-4" /> Abrir {ev.archivoNombre || 'Documento'}
                         </a>
                       )}
@@ -1040,10 +1063,10 @@ export default function PortfolioDocente() {
             <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-8">
               <div className="text-center sm:text-left">
                 <div className="flex items-center justify-center sm:justify-start gap-3">
-                  <div className="bg-blue-100 w-12 h-12 rounded-full flex items-center justify-center"><MessageCircle className="w-6 h-6 text-blue-600" /></div>
-                  <h2 className="text-3xl font-extrabold text-slate-900">Rincón de las Familias</h2>
+                  <div className="bg-blue-100 dark:bg-blue-900/50 w-12 h-12 rounded-full flex items-center justify-center transition-colors"><MessageCircle className="w-6 h-6 text-blue-600 dark:text-blue-400" /></div>
+                  <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white">Rincón de las Familias</h2>
                 </div>
-                <p className="text-slate-600 mt-2 text-lg">Espacio de comunicación y recursos para casa.</p>
+                <p className="text-slate-600 dark:text-slate-400 mt-2 text-lg">Espacio de comunicación y recursos para casa.</p>
               </div>
               {isAdmin && (
                 <button onClick={() => setShowFamiliasForm(true)} className="bg-blue-600 text-white px-5 py-2.5 rounded-xl font-bold hover:bg-blue-700 transition-colors flex items-center gap-2 shadow-md shrink-0">
@@ -1052,14 +1075,14 @@ export default function PortfolioDocente() {
               )}
             </div>
             {!showFamiliasForm && comunicados.length > 0 && (
-              <div className="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 mb-6 flex flex-col lg:flex-row gap-4">
+              <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 mb-6 flex flex-col lg:flex-row gap-4 transition-colors">
                 <div className="relative flex-1">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
-                  <input type="text" placeholder="Buscar comunicados..." value={searchTermFamilia} onChange={e => setSearchTermFamilia(e.target.value)} className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 outline-none" />
+                  <input type="text" placeholder="Buscar comunicados..." value={searchTermFamilia} onChange={e => setSearchTermFamilia(e.target.value)} className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-colors" />
                 </div>
                 <div className="flex gap-2 overflow-x-auto pb-2 lg:pb-0 scrollbar-hide">
                   {['Todos','Importante','Recurso','Consejo'].map(tipo => (
-                    <button key={tipo} onClick={() => setFilterTipoFamilia(tipo)} className={`px-4 py-2.5 rounded-xl whitespace-nowrap text-sm font-semibold transition-all ${filterTipoFamilia === tipo ? 'bg-blue-600 text-white shadow-md' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}>{tipo}</button>
+                    <button key={tipo} onClick={() => setFilterTipoFamilia(tipo)} className={`px-4 py-2.5 rounded-xl whitespace-nowrap text-sm font-semibold transition-all ${filterTipoFamilia === tipo ? 'bg-blue-600 text-white shadow-md' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700'}`}>{tipo}</button>
                   ))}
                 </div>
               </div>
@@ -1074,14 +1097,14 @@ export default function PortfolioDocente() {
                     <input type="text" required value={newComunicado.titulo} onChange={e => setNewComunicado({...newComunicado, titulo: e.target.value})} className="w-full border border-slate-300 rounded-lg p-2.5 focus:ring-2 focus:ring-blue-500" />
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-slate-700 mb-1">Tipo de aviso</label>
-                    <select value={newComunicado.tipo} onChange={e => setNewComunicado({...newComunicado, tipo: e.target.value})} className="w-full border border-slate-300 rounded-lg p-2.5 focus:ring-2 focus:ring-blue-500">
+                    <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1">Tipo de aviso</label>
+                    <select value={newComunicado.tipo} onChange={e => setNewComunicado({...newComunicado, tipo: e.target.value})} className="w-full border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-lg p-2.5 focus:ring-2 focus:ring-blue-500 transition-colors">
                       <option>Importante</option><option>Recurso</option><option>Consejo</option>
                     </select>
                   </div>
                   <div className="md:col-span-2">
-                    <label className="block text-sm font-semibold text-slate-700 mb-1">Mensaje / Descripción</label>
-                    <div className="bg-white rounded-lg overflow-hidden border border-slate-300 focus-within:ring-2 focus-within:ring-blue-500">
+                    <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1">Mensaje / Descripción</label>
+                    <div className="bg-white dark:bg-slate-800 rounded-lg overflow-hidden border border-slate-300 dark:border-slate-700 focus-within:ring-2 focus-within:ring-blue-500 transition-colors">
                       <ReactQuill 
                         theme="snow" 
                         value={newComunicado.descripcion} 
@@ -1118,14 +1141,14 @@ export default function PortfolioDocente() {
                   <button onClick={() => { setSearchTermFamilia(''); setFilterTipoFamilia('Todos'); }} className="mt-4 text-blue-600 font-bold text-sm hover:underline">Limpiar filtros</button>
                 </div>
               ) : filteredFamilias.map(com => {
-                let badgeColor = 'bg-slate-100 text-slate-800';
-                if (com.tipo === 'Importante') badgeColor = 'bg-amber-100 text-amber-800';
-                if (com.tipo === 'Recurso') badgeColor = 'bg-emerald-100 text-emerald-800';
-                if (com.tipo === 'Consejo') badgeColor = 'bg-pink-100 text-pink-800';
+                let badgeColor = 'bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-200';
+                if (com.tipo === 'Importante') badgeColor = 'bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300';
+                if (com.tipo === 'Recurso') badgeColor = 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300';
+                if (com.tipo === 'Consejo') badgeColor = 'bg-pink-100 text-pink-800 dark:bg-pink-900/40 dark:text-pink-300';
                 return (
-                  <div key={com.$id} className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col hover:shadow-md transition-all relative group">
+                  <div key={com.$id} className="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 flex flex-col hover:shadow-md transition-all relative group transition-colors">
                     {isAdmin && (
-                      <div className="absolute top-4 right-4 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity bg-white/90 p-1 rounded-lg">
+                      <div className="absolute top-4 right-4 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity bg-white/90 dark:bg-slate-800/90 p-1 rounded-lg">
                         <button onClick={() => triggerEditFamilia(com)} className="p-1 text-slate-400 hover:text-blue-600 transition-colors"><Edit className="w-4 h-4" /></button>
                         <button onClick={() => handleDeleteFamilia(com.$id)} className="p-1 text-slate-400 hover:text-red-600 transition-colors"><Trash2 className="w-4 h-4" /></button>
                       </div>
@@ -1134,10 +1157,10 @@ export default function PortfolioDocente() {
                        <span className={`w-fit text-xs font-bold px-2 py-1 rounded uppercase tracking-wide ${badgeColor}`}>{com.tipo}</span>
                        {com.$createdAt && <span className="text-xs font-bold text-slate-400 mt-1">{new Date(com.$createdAt).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}</span>}
                     </div>
-                    <h3 className="text-xl font-bold text-slate-800 mt-1 mb-2 pr-12">{com.titulo}</h3>
-                    <div className="text-slate-600 text-sm mb-4 leading-relaxed prose prose-sm max-w-none" dangerouslySetInnerHTML={{ __html: com.descripcion }}></div>
+                    <h3 className="text-xl font-bold text-slate-800 dark:text-white mt-1 mb-2 pr-12">{com.titulo}</h3>
+                    <div className="text-slate-600 dark:text-slate-300 text-sm mb-4 leading-relaxed prose prose-sm dark:prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: com.descripcion }}></div>
                     {com.archivoUrl && (
-                      <a href={com.archivoUrl} target="_blank" rel="noopener noreferrer" className="mt-auto inline-flex items-center gap-1.5 text-sm font-bold text-blue-600 hover:text-blue-800 transition-colors">
+                      <a href={com.archivoUrl} target="_blank" rel="noopener noreferrer" className="mt-auto inline-flex items-center gap-1.5 text-sm font-bold text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors">
                         <FileText className="w-4 h-4"/> Abrir Adjunto
                       </a>
                     )}
@@ -1153,8 +1176,8 @@ export default function PortfolioDocente() {
           <div className="space-y-8 animate-in fade-in duration-500">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 mb-8">
               <div>
-                <h2 className="text-3xl font-extrabold text-slate-900">Galería de Espacios</h2>
-                <p className="text-slate-600 mt-2">Un vistazo a nuestro día a día en el aula.</p>
+                <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white">Galería de Espacios</h2>
+                <p className="text-slate-600 dark:text-slate-400 mt-2">Un vistazo a nuestro día a día en el aula.</p>
               </div>
               {isAdmin && (
                 <button onClick={() => setShowGaleriaForm(true)} className="bg-indigo-600 text-white px-5 py-2.5 rounded-xl font-bold hover:bg-indigo-700 transition-colors flex items-center gap-2 shadow-md shrink-0">
@@ -1189,9 +1212,9 @@ export default function PortfolioDocente() {
             )}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {fotos.length === 0 ? (
-                <p className="text-slate-500 italic col-span-full">No hay fotos publicadas en la galería.</p>
+                <p className="text-slate-500 dark:text-slate-400 italic col-span-full">No hay fotos publicadas en la galería.</p>
               ) : fotos.map((foto, index) => (
-                <div key={foto.$id} onClick={() => setLightboxIndex(index)} className="group relative rounded-2xl overflow-hidden shadow-sm border border-slate-200 aspect-square bg-slate-100 cursor-pointer">
+                <div key={foto.$id} onClick={() => setLightboxIndex(index)} className="group relative rounded-2xl overflow-hidden shadow-sm border border-slate-200 dark:border-slate-800 aspect-square bg-slate-100 dark:bg-slate-900 cursor-pointer transition-colors">
                   {isAdmin && (
                     <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity z-30 bg-white/80 p-1 rounded-lg backdrop-blur-sm">
                       <button onClick={e => { e.stopPropagation(); triggerEditFoto(foto); }} className="p-1.5 text-slate-700 hover:text-indigo-600 transition-colors"><Edit className="w-4 h-4" /></button>
@@ -1221,21 +1244,21 @@ export default function PortfolioDocente() {
       </main>
 
       {/* FOOTER */}
-      <footer className="bg-slate-200/50 border-t border-slate-200 mt-12 py-8 relative z-40">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center gap-2 text-sm text-slate-500 text-center">
+      <footer className="bg-slate-200/50 dark:bg-slate-900/50 border-t border-slate-200 dark:border-slate-800 mt-12 py-8 relative z-40 transition-colors">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center gap-2 text-sm text-slate-500 dark:text-slate-400 text-center">
           <p>&copy; {new Date().getFullYear()} Web creada por Diego Alberto Moya Puerta. Todos los derechos reservados.</p>
-          <p className="font-bold text-slate-700 text-base">CEIP La Arboleda (Murcia)</p>
+          <p className="font-bold text-slate-700 dark:text-slate-300 text-base">CEIP La Arboleda (Murcia)</p>
         </div>
       </footer>
 
       {/* CONFIRM MODAL */}
       {confirmDialog && (
-        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
-           <div className="bg-white p-6 rounded-2xl shadow-xl max-w-sm w-full animate-in zoom-in-95">
-              <h3 className="text-xl font-bold mb-4 text-slate-800">Confirmar acción</h3>
-              <p className="text-slate-600 mb-6 font-medium">{confirmDialog.message}</p>
+        <div className="fixed inset-0 bg-slate-900/50 dark:bg-slate-950/80 backdrop-blur-sm z-[100] flex items-center justify-center p-4 transition-all">
+           <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-xl max-w-sm w-full animate-in zoom-in-95 border border-slate-100 dark:border-slate-800">
+              <h3 className="text-xl font-bold mb-4 text-slate-800 dark:text-white">Confirmar acción</h3>
+              <p className="text-slate-600 dark:text-slate-400 mb-6 font-medium">{confirmDialog.message}</p>
               <div className="flex justify-end gap-3">
-                 <button onClick={() => setConfirmDialog(null)} className="px-5 py-2 text-slate-600 hover:bg-slate-100 rounded-lg font-bold transition-colors">Cancelar</button>
+                 <button onClick={() => setConfirmDialog(null)} className="px-5 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg font-bold transition-colors">Cancelar</button>
                  <button onClick={confirmDialog.onConfirm} className="px-5 py-2 bg-red-600 text-white rounded-lg font-bold hover:bg-red-700 shadow-md">Eliminar</button>
               </div>
            </div>
@@ -1245,7 +1268,7 @@ export default function PortfolioDocente() {
       {/* TOASTS */}
       <div className="fixed bottom-4 right-4 z-[100] flex flex-col gap-2 pointer-events-none">
         {toasts.map(t => (
-          <div key={t.id} className={`p-4 rounded-xl shadow-lg text-white font-medium animate-in slide-in-from-bottom-5 pointer-events-auto flex items-center gap-2 max-w-sm ${t.type === 'error' ? 'bg-red-500' : 'bg-slate-900'}`}>
+          <div key={t.id} className={`p-4 rounded-xl shadow-lg text-white font-medium animate-in slide-in-from-bottom-5 pointer-events-auto flex items-center gap-2 max-w-sm ${t.type === 'error' ? 'bg-red-500' : 'bg-slate-900 dark:bg-indigo-600'}`}>
             <span className="leading-snug">{t.message}</span>
           </div>
         ))}

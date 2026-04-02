@@ -58,9 +58,62 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Dark Mode Global Support */
+.dark body {
+  background-color: #0f172a; /* slate-900 */
+}
+
+/* Quill Editor Dark Mode */
+.dark .quill-editor .ql-toolbar {
+  background: #1e293b; /* slate-800 */
+  border-bottom: 1px solid #334155 !important; /* slate-700 */
+}
+
+.dark .quill-editor .ql-toolbar .ql-stroke {
+  stroke: #cbd5e1; /* slate-300 */
+}
+
+.dark .quill-editor .ql-toolbar .ql-fill {
+  fill: #cbd5e1;
+}
+
+.dark .quill-editor .ql-toolbar .ql-picker {
+  color: #cbd5e1;
+}
+
+.dark .quill-editor .ql-container {
+  background: #0f172a; /* slate-900 */
+  color: #f1f5f9; /* slate-100 */
+}
+
+.dark .ql-snow.ql-toolbar button:hover, 
+.dark .ql-snow .ql-toolbar button:hover, 
+.dark .ql-snow.ql-toolbar button:focus, 
+.dark .ql-snow .ql-toolbar button:focus, 
+.dark .ql-snow.ql-toolbar button.ql-active, 
+.dark .ql-snow .ql-toolbar button.ql-active, 
+.dark .ql-snow.ql-toolbar .ql-picker-label:hover, 
+.dark .ql-snow .ql-toolbar .ql-picker-label:hover, 
+.dark .ql-snow.ql-toolbar .ql-picker-label.ql-active, 
+.dark .ql-snow .ql-toolbar .ql-picker-label.ql-active, 
+.dark .ql-snow.ql-toolbar .ql-picker-item:hover, 
+.dark .ql-snow .ql-toolbar .ql-picker-item:hover, 
+.dark .ql-snow.ql-toolbar .ql-picker-item.ql-selected, 
+.dark .ql-snow .ql-toolbar .ql-picker-item.ql-selected {
+  color: #818cf8; /* indigo-400 */
+}
+
+.dark .ql-snow.ql-toolbar button:hover .ql-stroke, 
+.dark .ql-snow .ql-toolbar button:hover .ql-stroke, 
+.dark .ql-snow.ql-toolbar button.ql-active .ql-stroke, 
+.dark .ql-snow .ql-toolbar button.ql-active .ql-stroke {
+  stroke: #818cf8;
+}
+
 body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s ease;
 }
 
 /* Animaciones Tailwind que usamos manualmente */
