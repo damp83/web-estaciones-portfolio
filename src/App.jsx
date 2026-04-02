@@ -19,6 +19,7 @@ const COL_EVALUACION    = 'evaluacion';
 const COL_FAMILIAS      = 'familias';
 const COL_GALERIA       = 'galeria';
 const COL_TRAYECTORIA   = 'trayectoria';
+const COL_EVENTOS       = 'eventos';
 const APPWRITE_BUCKET   = '69ce487f0008996c21da';
 const ADMIN_USER_ID     = '69ce54ed0035744a90ac';
 
@@ -81,6 +82,7 @@ export default function PortfolioDocente() {
   const [comunicados, setComunicados] = useState([]);
   const [fotos, setFotos] = useState([]);
   const [trayectoria, setTrayectoria] = useState([]);
+  const [eventos, setEventos] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   // Form visibility
@@ -89,6 +91,7 @@ export default function PortfolioDocente() {
   const [showFamiliasForm, setShowFamiliasForm] = useState(false);
   const [showGaleriaForm, setShowGaleriaForm] = useState(false);
   const [showTrayectoriaForm, setShowTrayectoriaForm] = useState(false);
+  const [showEventoForm, setShowEventoForm] = useState(false);
 
   // Edit IDs
   const [editMaterialId, setEditMaterialId] = useState(null);
@@ -96,6 +99,7 @@ export default function PortfolioDocente() {
   const [editFamiliaId, setEditFamiliaId] = useState(null);
   const [editFotoId, setEditFotoId] = useState(null);
   const [editTrayectoriaId, setEditTrayectoriaId] = useState(null);
+  const [editEventoId, setEditEventoId] = useState(null);
 
   // Lightbox
   const [lightboxIndex, setLightboxIndex] = useState(null);
@@ -128,6 +132,7 @@ export default function PortfolioDocente() {
   const [newFoto, setNewFoto] = useState({ titulo: '' });
   const [archivoImagen, setArchivoImagen] = useState(null);
   const [newTrayectoria, setNewTrayectoria] = useState({ categoria: 'Experiencia', titulo: '', subtitulo: '', fecha: '', descripcion: '' });
+  const [newEvento, setNewEvento] = useState({ titulo: '', descripcion: '', fecha: '', tipo: 'Reunión' });
 
   // --- AUTH ---
   useEffect(() => {
@@ -148,18 +153,20 @@ export default function PortfolioDocente() {
     setIsLoading(true);
     const fetchData = async () => {
       try {
-        const [resMat, resEval, resFam, resGal, resTray] = await Promise.all([
+        const [resMat, resEval, resFam, resGal, resTray, resEv] = await Promise.all([
           databases.listDocuments(APPWRITE_DB, COL_MATERIALES),
           databases.listDocuments(APPWRITE_DB, COL_EVALUACION),
           databases.listDocuments(APPWRITE_DB, COL_FAMILIAS),
           databases.listDocuments(APPWRITE_DB, COL_GALERIA),
           databases.listDocuments(APPWRITE_DB, COL_TRAYECTORIA),
+          databases.listDocuments(APPWRITE_DB, COL_EVENTOS, [Query.orderAsc('fecha')]),
         ]);
         setMateriales(resMat.documents.reverse());
         setEvaluaciones(resEval.documents.reverse());
         setComunicados(resFam.documents.reverse());
         setFotos(resGal.documents.reverse());
         setTrayectoria(resTray.documents.reverse());
+        setEventos(resEv.documents);
       } catch (e) {
         console.error('Error cargando datos:', e);
         if (e.message) alert('Error listando documentos: ' + e.message);
@@ -175,6 +182,7 @@ export default function PortfolioDocente() {
       `databases.${APPWRITE_DB}.collections.${COL_FAMILIAS}.documents`,
       `databases.${APPWRITE_DB}.collections.${COL_GALERIA}.documents`,
       `databases.${APPWRITE_DB}.collections.${COL_TRAYECTORIA}.documents`,
+      `databases.${APPWRITE_DB}.collections.${COL_EVENTOS}.documents`,
     ], (response) => {
       const { events, payload } = response;
       const event = events[0];
@@ -224,6 +232,15 @@ export default function PortfolioDocente() {
           setTrayectoria(prev => prev.map(x => x.$id === payload.$id ? payload : x));
         } else if (type === 'delete') {
           setTrayectoria(prev => prev.filter(x => x.$id !== payload.$id));
+        }
+      } else if (collId === COL_EVENTOS) {
+        if (type === 'create') {
+          setEventos(prev => [...prev, payload].sort((a,b) => a.fecha.localeCompare(b.fecha)));
+          if (!isAdmin) addToast('Nuevo evento en el calendario');
+        } else if (type === 'update') {
+          setEventos(prev => prev.map(x => x.$id === payload.$id ? payload : x).sort((a,b) => a.fecha.localeCompare(b.fecha)));
+        } else if (type === 'delete') {
+          setEventos(prev => prev.filter(x => x.$id !== payload.$id));
         }
       }
     });
@@ -362,6 +379,178 @@ export default function PortfolioDocente() {
     setShowEvaluacionForm(false); setEditEvaluacionId(null);
     setNewEvaluacion({ titulo: '', descripcion: '' }); setArchivoEvidencia(null);
   };
+
+  // --- CALENDARIO ---
+  const [currentMonth, setCurrentMonth] = useState(new Date());
+  const triggerEditEvento = (ev) => {
+    setNewEvento({ titulo: ev.titulo, descripcion: ev.descripcion, fecha: ev.fecha, tipo: ev.tipo });
+    setEditEventoId(ev.$id); setShowEventoForm(true);
+  };
+  const handleDeleteEvento = async (id) => {
+    setConfirmDialog({
+      message: '¿Estás seguro de que quieres eliminar este evento?',
+      onConfirm: async () => {
+        try {
+          await databases.deleteDocument(APPWRITE_DB, COL_EVENTOS, id);
+          setEventos(prev => prev.filter(e => e.$id !== id));
+          addToast('Evento eliminado', 'success');
+        } catch (e) { addToast('Error al eliminar el evento: ' + e.message, 'error'); }
+        setConfirmDialog(null);
+      }
+    });
+  };
+  const handleSaveEvento = async (e) => {
+    e.preventDefault();
+    if (!newEvento.titulo || !newEvento.fecha) return;
+    setIsSaving(true);
+    try {
+      const data = {
+        titulo: newEvento.titulo,
+        descripcion: newEvento.descripcion || '',
+        fecha: newEvento.fecha,
+        tipo: newEvento.tipo
+      };
+      if (editEventoId) {
+        const upd = await databases.updateDocument(APPWRITE_DB, COL_EVENTOS, editEventoId, data);
+        setEventos(prev => prev.map(e => e.$id === editEventoId ? upd : e).sort((a,b) => a.fecha.localeCompare(b.fecha)));
+      } else {
+        const cre = await databases.createDocument(APPWRITE_DB, COL_EVENTOS, ID.unique(), data);
+        setEventos(prev => [...prev, cre].sort((a,b) => a.fecha.localeCompare(b.fecha)));
+      }
+      cerrarFormularioEvento();
+      addToast('Evento guardado correctamente');
+    } catch (e) { addToast('Error al guardar evento: ' + e.message, 'error'); }
+    finally { setIsSaving(false); }
+  };
+  const cerrarFormularioEvento = () => {
+    setShowEventoForm(false); setEditEventoId(null);
+    setNewEvento({ titulo: '', descripcion: '', fecha: '', tipo: 'Reunión' });
+  };
+
+  const RenderCalendario = () => {
+    const daysInMonth = (y, m) => new Date(y, m + 1, 0).getDate();
+    const firstDayOfMonth = (y, m) => {
+      let d = new Date(y, m, 1).getDay();
+      return d === 0 ? 6 : d - 1; // Lunes a Domingo
+    };
+
+    const year = currentMonth.getFullYear();
+    const month = currentMonth.getMonth();
+    const totalDays = daysInMonth(year, month);
+    const startOffset = firstDayOfMonth(year, month);
+    const monthName = new Intl.DateTimeFormat('es-ES', { month: 'long', year: 'numeric' }).format(currentMonth);
+
+    const prevMonth = () => setCurrentMonth(new Date(year, month - 1, 1));
+    const nextMonth = () => setCurrentMonth(new Date(year, month + 1, 1));
+
+    const getTipoStyles = (tipo) => {
+      switch(tipo) {
+        case 'Examen':    return 'bg-red-500 text-white';
+        case 'Excursión': return 'bg-emerald-500 text-white';
+        case 'Reunión':  return 'bg-indigo-600 text-white';
+        case 'Festivo':   return 'bg-amber-500 text-slate-900';
+        default:          return 'bg-slate-500 text-white';
+      }
+    };
+
+    return (
+      <div className="space-y-8 animate-in fade-in duration-500">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+          <div>
+            <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white">Calendario de Aula</h2>
+            <p className="text-slate-600 dark:text-slate-400 mt-2">Próximos eventos, exámenes y actividades.</p>
+          </div>
+          {isAdmin && (
+            <button onClick={() => setShowEventoForm(true)} className="bg-indigo-600 dark:bg-indigo-500 text-white px-5 py-2.5 rounded-xl font-bold hover:bg-indigo-700 dark:hover:bg-indigo-600 transition-all flex items-center gap-2 shadow-md">
+              <Plus className="w-5 h-5" /> Nuevo Evento
+            </button>
+          )}
+        </div>
+
+        {isAdmin && showEventoForm && (
+          <form onSubmit={handleSaveEvento} className="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-lg border border-indigo-100 dark:border-slate-800 mb-8 relative animate-in slide-in-from-top-4 transition-colors">
+            <button type="button" onClick={cerrarFormularioEvento} className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"><X className="w-6 h-6" /></button>
+            <h3 className="text-xl font-bold text-slate-800 dark:text-white mb-4">{editEventoId ? 'Editar Evento' : 'Añadir Evento'}</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1">Título</label>
+                <input type="text" required value={newEvento.titulo} onChange={e => setNewEvento({...newEvento, titulo: e.target.value})} className="w-full border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-lg p-2.5 focus:ring-2 focus:ring-indigo-500 transition-colors" placeholder="Ej: Examen del Tema 3" />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1">Tipo de evento</label>
+                <select value={newEvento.tipo} onChange={e => setNewEvento({...newEvento, tipo: e.target.value})} className="w-full border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-lg p-2.5 focus:ring-2 focus:ring-indigo-500 transition-colors">
+                  <option>Examen</option><option>Excursión</option><option>Reunión</option><option>Festivo</option><option>Otro</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1">Fecha</label>
+                <input type="date" required value={newEvento.fecha} onChange={e => setNewEvento({...newEvento, fecha: e.target.value})} className="w-full border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-lg p-2.5 focus:ring-2 focus:ring-indigo-500 transition-colors" />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1">Descripción (opcional)</label>
+                <input type="text" value={newEvento.descripcion} onChange={e => setNewEvento({...newEvento, descripcion: e.target.value})} className="w-full border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-lg p-2.5 focus:ring-2 focus:ring-indigo-500 transition-colors" placeholder="Ej: Traer estuche y regla" />
+              </div>
+            </div>
+            <button type="submit" disabled={isSaving} className="w-full bg-indigo-600 dark:bg-indigo-500 text-white font-bold py-3 rounded-xl hover:bg-indigo-700 dark:hover:bg-indigo-600 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition-all">
+              {isSaving ? <><Loader2 className="w-5 h-5 animate-spin" /> Guardando...</> : editEventoId ? 'Actualizar Evento' : 'Guardar Evento'}
+            </button>
+          </form>
+        )}
+
+        <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-800 p-6 sm:p-8 transition-colors">
+          <div className="flex items-center justify-between mb-8">
+            <h3 className="text-xl font-bold text-slate-800 dark:text-white capitalize">{monthName}</h3>
+            <div className="flex gap-2">
+              <button onClick={prevMonth} className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700"><ChevronLeft className="w-6 h-6" /></button>
+              <button onClick={nextMonth} className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700"><ChevronRight className="w-6 h-6" /></button>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-7 gap-px bg-slate-200 dark:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-inner font-bold text-center text-xs sm:text-sm text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+            {['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'].map(d => <div key={d} className="bg-slate-50 dark:bg-slate-950 py-3">{d}</div>)}
+          </div>
+
+          <div className="grid grid-cols-7 gap-px bg-slate-200 dark:bg-slate-800 border-x border-b border-slate-200 dark:border-slate-800 rounded-b-xl overflow-hidden">
+            {Array.from({ length: startOffset }).map((_, i) => (
+              <div key={`empty-${i}`} className="bg-slate-50/50 dark:bg-slate-950/50 min-h-[100px] sm:min-h-[140px]"></div>
+            ))}
+            {Array.from({ length: totalDays }).map((_, i) => {
+              const d = i + 1;
+              const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+              const dayEvents = eventos.filter(e => e.fecha === dateStr);
+              const isToday = new Date().toISOString().split('T')[0] === dateStr;
+
+              return (
+                <div key={d} className={`bg-white dark:bg-slate-900 min-h-[100px] sm:min-h-[140px] p-2 sm:p-3 relative transition-colors ${isToday ? 'ring-2 ring-indigo-500 ring-inset' : ''}`}>
+                  <span className={`text-sm font-bold ${isToday ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-500 dark:text-slate-400'}`}>{d}</span>
+                  <div className="mt-2 space-y-1">
+                    {dayEvents.map(ev => (
+                      <div key={ev.$id} onClick={() => isAdmin && triggerEditEvento(ev)} className={`text-[10px] sm:text-xs p-1 sm:p-1.5 rounded font-bold cursor-pointer ${getTipoStyles(ev.tipo)} hover:brightness-110 transition-all truncate group relative shadow-sm`}>
+                        {ev.titulo}
+                        {isAdmin && (
+                          <button onClick={(e) => { e.stopPropagation(); handleDeleteEvento(ev.$id); }} className="absolute -top-1 -right-1 bg-white dark:bg-slate-800 text-red-600 dark:text-red-400 rounded-full shadow-md p-1 opacity-0 group-hover:opacity-100 transition-opacity border border-slate-200 dark:border-slate-700"><X className="w-3 h-3" /></button>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          
+          <div className="mt-8 grid grid-cols-2 sm:grid-cols-5 gap-4">
+             {['Examen', 'Excursión', 'Reunión', 'Festivo', 'Otro'].map(type => (
+               <div key={type} className="flex items-center gap-2 py-2 px-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg transition-colors">
+                 <div className={`w-3 h-3 rounded-full ${getTipoStyles(type)} shadow-sm`}></div>
+                 <span className="text-[10px] sm:text-xs font-bold text-slate-500 dark:text-slate-400 tracking-wide uppercase">{type}</span>
+               </div>
+             ))}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
 
   // --- FAMILIAS ---
   const triggerEditFamilia = (com) => {
@@ -640,6 +829,7 @@ export default function PortfolioDocente() {
                <NavButton id="metodologia" label="Método" icon={BookOpen} />
                <NavButton id="materiales" label="Materiales" icon={Shapes} />
                <NavButton id="evaluacion" label="Evaluación" icon={LineChart} />
+               <NavButton id="calendario" label="Calendario" icon={Users} />
                <NavButton id="familias" label="Familias" icon={MessageCircle} />
                <NavButton id="galeria" label="Galería" icon={Camera} />
             </div>
@@ -665,6 +855,7 @@ export default function PortfolioDocente() {
             <NavButton id="metodologia" label="Método" icon={BookOpen} />
             <NavButton id="materiales" label="Materiales" icon={Shapes} />
             <NavButton id="evaluacion" label="Evaluación" icon={LineChart} />
+            <NavButton id="calendario" label="Calendario" icon={Users} />
             <NavButton id="familias" label="Familias" icon={MessageCircle} />
             <NavButton id="galeria" label="Galería" icon={Camera} />
           </div>
@@ -714,6 +905,9 @@ export default function PortfolioDocente() {
             </div>
           </div>
         )}
+
+        {/* CALENDARIO */}
+        {activeTab === 'calendario' && <RenderCalendario />}
 
 
         {/* TRAYECTORIA */}
