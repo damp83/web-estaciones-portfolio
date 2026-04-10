@@ -145,3 +145,79 @@ body {
 /* Ocultar scrollbar en filtros horizontales */
 .scrollbar-hide::-webkit-scrollbar { display: none; }
 .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Custom Scrollbar Premium */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent; 
+}
+::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1; /* slate-300 */
+  border-radius: 20px;
+  border: 3px solid transparent; /* fake padding */
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: #818cf8; /* indigo-400 */
+}
+.dark ::-webkit-scrollbar-thumb {
+  background-color: #334155; /* slate-700 */
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background-color: #6366f1; /* indigo-500 */
+}
+
+/* Fondos Orgánicos (Dot Grid y Blobs) */
+.bg-grid-slate-200 {
+  background-image: radial-gradient(#e2e8f0 1.5px, transparent 1.5px);
+  background-size: 32px 32px;
+}
+.dark .bg-grid-slate-800 {
+  background-image: radial-gradient(#1e293b 1.5px, transparent 1.5px);
+  background-size: 32px 32px;
+}
+
+.blob {
+  position: absolute;
+  filter: blur(80px);
+  z-index: 0;
+  opacity: 0.5;
+  border-radius: 50%;
+  animation: float 12s ease-in-out infinite;
+  pointer-events: none;
+}
+.blob-indigo { background: #6366f1; }
+.blob-emerald { background: #10b981; }
+
+@keyframes float {
+  0%   { transform: translateY(0px) scale(1); }
+  33%  { transform: translateY(-40px) scale(1.1); }
+  66%  { transform: translateY(30px) scale(0.9); }
+  100% { transform: translateY(0px) scale(1); }
+}
+
+/* Hover Animado Mágico (Underline que crece del centro) */
+.hover-underline-magic {
+  position: relative;
+  text-decoration: none;
+}
+.hover-underline-magic::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 3px;
+  bottom: -6px;
+  left: 0;
+  background-color: currentColor;
+  transform-origin: bottom center;
+  transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  border-radius: 4px;
+}
+.hover-underline-magic:hover::after,
+.hover-underline-magic.active::after {
+  transform: scaleX(1);
+}

@@ -845,16 +845,18 @@ export default function PortfolioDocente() {
 
   const NavButton = ({ id, label, icon: Icon }) => (
     <button
-      onClick={() => { setActiveTab(id); setIsMobileMenuOpen(false); }}
-      className={`flex items-center gap-2 px-4 py-3 rounded-xl font-medium transition-all duration-200 w-full md:w-auto
-        ${activeTab === id ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400'}`}
+      onClick={() => setActiveTab(id)}
+      className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl transition-all duration-300 font-bold group transform hover:-translate-y-1
+        ${activeTab === id ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/30 scale-105' : 'text-slate-600 dark:text-slate-400 hover:bg-white dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 hover:shadow-md'}`}
     >
-      <Icon className="w-5 h-5" /><span>{label}</span>
+      <Icon className="w-5 h-5 group-hover:scale-110 transition-transform" /><span>{label}</span>
     </button>
   );
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 font-sans text-slate-800 dark:text-slate-200 transition-colors duration-300 pb-20">
+    <div className="min-h-screen bg-transparent font-sans text-slate-800 dark:text-slate-200 transition-colors duration-300 pb-20 relative">
+      <div className="fixed inset-0 bg-slate-50 dark:bg-slate-950 -z-20"></div>
+      <div className="fixed inset-0 bg-grid-slate-200 dark:bg-grid-slate-800 -z-10 [mask-image:linear-gradient(to_bottom,white,transparent)]"></div>
 
       {/* LOGIN MODAL */}
       {showLoginModal && (
@@ -910,7 +912,7 @@ export default function PortfolioDocente() {
       </header>
 
       {/* STICKY NAV BAR */}
-      <nav className="sticky top-0 z-50 bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border-b border-slate-200 dark:border-slate-800 shadow-sm overflow-x-auto scrollbar-hide transition-colors">
+      <nav className="sticky top-0 z-50 bg-white/70 dark:bg-slate-900/70 backdrop-blur-md border-b border-slate-200/50 dark:border-slate-800/50 shadow-sm overflow-x-auto scrollbar-hide transition-colors">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between md:justify-center h-16 sm:h-20">
             <div className="hidden md:flex items-center gap-1 w-full justify-between">
@@ -959,8 +961,11 @@ export default function PortfolioDocente() {
         {activeTab === 'inicio' && (
           <div className="space-y-12 animate-in fade-in duration-700">
             <Reveal>
-              <div className="bg-indigo-900 dark:bg-indigo-950 rounded-3xl overflow-hidden shadow-xl relative transition-colors">
-              <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-indigo-300 via-transparent to-transparent"></div>
+              <div className="relative mb-20 md:mb-12">
+                <div className="blob blob-indigo top-0 -left-10 w-72 h-72"></div>
+                <div className="blob blob-emerald top-40 -right-10 w-96 h-96"></div>
+                <div className="bg-indigo-900 dark:bg-indigo-950 rounded-3xl overflow-hidden shadow-2xl shadow-indigo-500/20 relative z-10 transition-colors border border-indigo-500/10 backdrop-blur-sm">
+                  <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-indigo-300 via-transparent to-transparent"></div>
               <div className="px-8 py-10 sm:px-16 sm:py-16 relative z-10 flex flex-col md:flex-row items-center gap-12">
                 <div className="flex-1 space-y-6">
                   {isAdmin ? (
@@ -979,19 +984,19 @@ export default function PortfolioDocente() {
                   </button>
                 </div>
               </div>
-            </div>
-          </Reveal>
+              </div>
+            </Reveal>
             <Reveal delay={0.3}>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 flex items-start gap-4 transition-colors">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-20">
+              <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 flex items-start gap-4 transition-all hover:-translate-y-1 hover:shadow-xl hover:shadow-blue-500/10 hover:border-blue-500/30">
                 <div className="p-3 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-xl"><Users className="w-6 h-6" /></div>
                 <div><h3 className="font-bold text-slate-800 dark:text-white text-lg">Inclusión Real</h3><p className="text-slate-500 dark:text-slate-400 text-sm mt-1">Materiales multinivel adaptados al Diseño Universal para el Aprendizaje (DUA).</p></div>
               </div>
-              <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 flex items-start gap-4 transition-colors">
+              <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 flex items-start gap-4 transition-all hover:-translate-y-1 hover:shadow-xl hover:shadow-emerald-500/10 hover:border-emerald-500/30">
                 <div className="p-3 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 rounded-xl"><Heart className="w-6 h-6" /></div>
                 <div><h3 className="font-bold text-slate-800 dark:text-white text-lg">Autonomía</h3><p className="text-slate-500 dark:text-slate-400 text-sm mt-1">El alumnado es protagonista, fomentando la responsabilidad y la ayuda entre iguales.</p></div>
               </div>
-              <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 flex items-start gap-4 transition-colors">
+              <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 flex items-start gap-4 transition-all hover:-translate-y-1 hover:shadow-xl hover:shadow-amber-500/10 hover:border-amber-500/30">
                 <div className="p-3 bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 rounded-xl"><Puzzle className="w-6 h-6" /></div>
                 <div><h3 className="font-bold text-slate-800 dark:text-white text-lg">Manipulativo</h3><p className="text-slate-500 dark:text-slate-400 text-sm mt-1">Aprender tocando y experimentando, respetando la etapa evolutiva del primer ciclo.</p></div>
               </div>
@@ -1244,7 +1249,7 @@ export default function PortfolioDocente() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {filteredMateriales.slice(0, visibleMateriales).map((mat, idx) => (
                   <Reveal key={mat.$id} delay={0.1 * (idx % 6)}>
-                    <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden flex flex-col sm:flex-row hover:shadow-md transition-all relative group h-full">
+                    <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden flex flex-col sm:flex-row transition-all hover:shadow-xl hover:shadow-indigo-500/10 hover:border-indigo-500/30 hover:-translate-y-1 relative group h-full">
                       {isAdmin && (
                         <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity bg-white/90 dark:bg-slate-800/90 p-1 rounded-lg shadow-sm">
                           <button onClick={() => triggerEditMaterial(mat)} className="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900 rounded-md transition-colors"><Edit className="w-4 h-4" /></button>
@@ -1357,7 +1362,7 @@ export default function PortfolioDocente() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {evaluaciones.map((ev, idx) => (
                     <Reveal key={ev.$id} delay={0.1 * (idx % 6)}>
-                      <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-col relative group hover:shadow-md transition-shadow h-full">
+                      <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 flex flex-col relative group hover:shadow-xl hover:shadow-emerald-500/10 hover:border-emerald-500/30 hover:-translate-y-1 transition-all h-full">
                       {isAdmin && (
                         <div className="absolute top-3 right-3 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                           <button onClick={() => triggerEditEvaluacion(ev)} className="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-md transition-colors"><Edit className="w-4 h-4" /></button>
@@ -1477,7 +1482,7 @@ export default function PortfolioDocente() {
                 if (com.tipo === 'Consejo') badgeColor = 'bg-pink-100 text-pink-800 dark:bg-pink-900/40 dark:text-pink-300';
                 return (
                   <Reveal key={com.$id} delay={0.1}>
-                    <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 flex flex-col hover:shadow-md transition-all relative group transition-colors">
+                    <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 flex flex-col transition-all hover:shadow-xl hover:shadow-blue-500/10 hover:border-blue-500/30 hover:-translate-y-1 relative group">
                       {isAdmin && (
                         <div className="absolute top-4 right-4 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity bg-white/90 dark:bg-slate-800/90 p-1 rounded-lg">
                           <button onClick={() => triggerEditFamilia(com)} className="p-1 text-slate-400 hover:text-blue-600 transition-colors"><Edit className="w-4 h-4" /></button>
@@ -1558,7 +1563,7 @@ export default function PortfolioDocente() {
                 <p className="text-slate-500 dark:text-slate-400 italic col-span-full">No hay fotos publicadas en la galería.</p>
               ) : fotos.map((foto, index) => (
                 <Reveal key={foto.$id} delay={0.1 * (index % 6)}>
-                  <div onClick={() => setLightboxIndex(index)} className="group relative rounded-2xl overflow-hidden shadow-sm border border-slate-200 dark:border-slate-800 aspect-square bg-slate-100 dark:bg-slate-900 cursor-pointer transition-colors h-full w-full">
+                  <div onClick={() => setLightboxIndex(index)} className="group relative rounded-2xl overflow-hidden shadow-sm border border-slate-200 dark:border-slate-800 aspect-square bg-slate-100 dark:bg-slate-900 cursor-pointer transition-all hover:shadow-xl hover:shadow-indigo-500/20 hover:border-indigo-500/40 hover:-translate-y-1 h-full w-full">
                     {isAdmin && (
                       <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity z-30 bg-white/80 p-1 rounded-lg backdrop-blur-sm">
                         <button onClick={e => { e.stopPropagation(); triggerEditFoto(foto); }} className="p-1.5 text-slate-700 hover:text-indigo-600 transition-colors"><Edit className="w-4 h-4" /></button>
