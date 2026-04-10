@@ -60,6 +60,78 @@ const deleteFileFromUrl = async (url) => {
   }
 };
 
+const SkeletonMaterial = () => (
+  <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-100 dark:border-slate-800 flex flex-col md:flex-row gap-6 animate-pulse">
+    <div className="bg-slate-200 dark:bg-slate-800 w-16 h-16 rounded-2xl shrink-0"></div>
+    <div className="flex-1 w-full">
+      <div className="h-5 bg-slate-200 dark:bg-slate-800 rounded w-1/4 mb-3"></div>
+      <div className="h-6 bg-slate-200 dark:bg-slate-800 rounded w-3/4 mb-2"></div>
+      <div className="h-4 bg-slate-200 dark:bg-slate-800 rounded w-full mb-1"></div>
+      <div className="h-4 bg-slate-200 dark:bg-slate-800 rounded w-5/6 mb-4"></div>
+      <div className="h-8 bg-slate-200 dark:bg-slate-800 rounded w-32"></div>
+    </div>
+  </div>
+);
+
+const SkeletonEvaluacion = () => (
+  <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 flex flex-col relative animate-pulse h-48">
+    <div className="h-6 bg-slate-200 dark:bg-slate-800 rounded w-3/4 mb-2"></div>
+    <div className="h-4 bg-slate-200 dark:bg-slate-800 rounded w-full mb-1"></div>
+    <div className="h-4 bg-slate-200 dark:bg-slate-800 rounded w-5/6 mb-4"></div>
+    <div className="mt-auto h-8 bg-slate-200 dark:bg-slate-800 rounded w-32"></div>
+  </div>
+);
+
+const SkeletonFamilia = () => (
+  <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 flex flex-col relative animate-pulse h-56">
+    <div className="flex justify-between mb-4">
+      <div className="h-5 bg-slate-200 dark:bg-slate-800 rounded w-20"></div>
+      <div className="h-4 bg-slate-200 dark:bg-slate-800 rounded w-24"></div>
+    </div>
+    <div className="h-6 bg-slate-200 dark:bg-slate-800 rounded w-2/3 mb-4"></div>
+    <div className="space-y-2 mb-4">
+      <div className="h-3 bg-slate-200 dark:bg-slate-800 rounded w-full"></div>
+      <div className="h-3 bg-slate-200 dark:bg-slate-800 rounded w-5/6"></div>
+      <div className="h-3 bg-slate-200 dark:bg-slate-800 rounded w-4/6"></div>
+    </div>
+  </div>
+);
+
+const SkeletonGaleria = () => (
+  <div className="rounded-2xl aspect-square border border-slate-200 dark:border-slate-800 bg-slate-200 dark:bg-slate-800 animate-pulse"></div>
+);
+
+const SkeletonCalendario = () => (
+  <div className="animate-pulse">
+    <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800">
+      <div className="flex items-center justify-between mb-8">
+        <div className="h-6 bg-slate-200 dark:bg-slate-800 rounded w-48"></div>
+        <div className="flex gap-2">
+          <div className="w-10 h-10 bg-slate-200 dark:bg-slate-800 rounded-lg"></div>
+          <div className="w-10 h-10 bg-slate-200 dark:bg-slate-800 rounded-lg"></div>
+        </div>
+      </div>
+      <div className="h-[400px] w-full bg-slate-200 dark:bg-slate-800 rounded-xl"></div>
+    </div>
+  </div>
+);
+
+const SkeletonTrayectoria = () => (
+  <div className="relative pl-8 sm:pl-32 py-6 border-l-2 border-slate-200 dark:border-slate-800 animate-pulse">
+    <div className="absolute left-[-11px] sm:left-[-11px] top-8 w-5 h-5 rounded-full bg-slate-200 dark:bg-slate-700 border-4 border-white dark:border-slate-950"></div>
+    <div className="hidden sm:block absolute left-4 top-8 w-20 h-4 bg-slate-200 dark:bg-slate-800 rounded"></div>
+    <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-100 dark:border-slate-800">
+      <div className="flex items-center gap-2 mb-3">
+        <div className="w-6 h-6 bg-slate-200 dark:bg-slate-800 rounded"></div>
+        <div className="h-4 bg-slate-200 dark:bg-slate-800 rounded w-24"></div>
+      </div>
+      <div className="h-6 bg-slate-200 dark:bg-slate-800 rounded w-3/4 mb-2"></div>
+      <div className="h-5 bg-slate-200 dark:bg-slate-800 rounded w-1/2 mb-4"></div>
+      <div className="h-4 bg-slate-200 dark:bg-slate-800 rounded w-full"></div>
+    </div>
+  </div>
+);
+
 export default function PortfolioDocente() {
   const [activeTab, setActiveTab] = useState('inicio');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -514,56 +586,60 @@ export default function PortfolioDocente() {
           </form>
         )}
 
-        <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-800 p-6 sm:p-8 transition-colors">
-          <div className="flex items-center justify-between mb-8">
-            <h3 className="text-xl font-bold text-slate-800 dark:text-white capitalize">{monthName}</h3>
-            <div className="flex gap-2">
-              <button onClick={prevMonth} className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700"><ChevronLeft className="w-6 h-6" /></button>
-              <button onClick={nextMonth} className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700"><ChevronRight className="w-6 h-6" /></button>
+        {isLoading ? (
+          <SkeletonCalendario />
+        ) : (
+          <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-800 p-6 sm:p-8 transition-colors">
+            <div className="flex items-center justify-between mb-8">
+              <h3 className="text-xl font-bold text-slate-800 dark:text-white capitalize">{monthName}</h3>
+              <div className="flex gap-2">
+                <button onClick={prevMonth} className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700"><ChevronLeft className="w-6 h-6" /></button>
+                <button onClick={nextMonth} className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700"><ChevronRight className="w-6 h-6" /></button>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-7 gap-px bg-slate-200 dark:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-inner font-bold text-center text-xs sm:text-sm text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+              {['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'].map(d => <div key={d} className="bg-slate-50 dark:bg-slate-950 py-3">{d}</div>)}
+            </div>
+
+            <div className="grid grid-cols-7 gap-px bg-slate-200 dark:bg-slate-800 border-x border-b border-slate-200 dark:border-slate-800 rounded-b-xl overflow-hidden">
+              {Array.from({ length: startOffset }).map((_, i) => (
+                <div key={`empty-${i}`} className="bg-slate-50/50 dark:bg-slate-950/50 min-h-[100px] sm:min-h-[140px]"></div>
+              ))}
+              {Array.from({ length: totalDays }).map((_, i) => {
+                const d = i + 1;
+                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+                const dayEvents = eventos.filter(e => e.fecha === dateStr);
+                const isToday = new Date().toISOString().split('T')[0] === dateStr;
+
+                return (
+                  <div key={d} className={`bg-white dark:bg-slate-900 min-h-[100px] sm:min-h-[140px] p-2 sm:p-3 relative transition-colors ${isToday ? 'ring-2 ring-indigo-500 ring-inset' : ''}`}>
+                    <span className={`text-sm font-bold ${isToday ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-500 dark:text-slate-400'}`}>{d}</span>
+                    <div className="mt-2 space-y-1">
+                      {dayEvents.map(ev => (
+                        <div key={ev.$id} onClick={() => isAdmin && triggerEditEvento(ev)} className={`text-[10px] sm:text-xs p-1 sm:p-1.5 rounded font-bold cursor-pointer ${getTipoStyles(ev.tipo)} hover:brightness-110 transition-all truncate group relative shadow-sm`}>
+                          {ev.titulo}
+                          {isAdmin && (
+                            <button onClick={(e) => { e.stopPropagation(); handleDeleteEvento(ev.$id); }} className="absolute -top-1 -right-1 bg-white dark:bg-slate-800 text-red-600 dark:text-red-400 rounded-full shadow-md p-1 opacity-0 group-hover:opacity-100 transition-opacity border border-slate-200 dark:border-slate-700"><X className="w-3 h-3" /></button>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            
+            <div className="mt-8 grid grid-cols-2 sm:grid-cols-5 gap-4">
+               {['Examen', 'Excursión', 'Reunión', 'Festivo', 'Otro'].map(type => (
+                 <div key={type} className="flex items-center gap-2 py-2 px-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg transition-colors">
+                   <div className={`w-3 h-3 rounded-full ${getTipoStyles(type)} shadow-sm`}></div>
+                   <span className="text-[10px] sm:text-xs font-bold text-slate-500 dark:text-slate-400 tracking-wide uppercase">{type}</span>
+                 </div>
+               ))}
             </div>
           </div>
-
-          <div className="grid grid-cols-7 gap-px bg-slate-200 dark:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-inner font-bold text-center text-xs sm:text-sm text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-            {['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'].map(d => <div key={d} className="bg-slate-50 dark:bg-slate-950 py-3">{d}</div>)}
-          </div>
-
-          <div className="grid grid-cols-7 gap-px bg-slate-200 dark:bg-slate-800 border-x border-b border-slate-200 dark:border-slate-800 rounded-b-xl overflow-hidden">
-            {Array.from({ length: startOffset }).map((_, i) => (
-              <div key={`empty-${i}`} className="bg-slate-50/50 dark:bg-slate-950/50 min-h-[100px] sm:min-h-[140px]"></div>
-            ))}
-            {Array.from({ length: totalDays }).map((_, i) => {
-              const d = i + 1;
-              const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
-              const dayEvents = eventos.filter(e => e.fecha === dateStr);
-              const isToday = new Date().toISOString().split('T')[0] === dateStr;
-
-              return (
-                <div key={d} className={`bg-white dark:bg-slate-900 min-h-[100px] sm:min-h-[140px] p-2 sm:p-3 relative transition-colors ${isToday ? 'ring-2 ring-indigo-500 ring-inset' : ''}`}>
-                  <span className={`text-sm font-bold ${isToday ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-500 dark:text-slate-400'}`}>{d}</span>
-                  <div className="mt-2 space-y-1">
-                    {dayEvents.map(ev => (
-                      <div key={ev.$id} onClick={() => isAdmin && triggerEditEvento(ev)} className={`text-[10px] sm:text-xs p-1 sm:p-1.5 rounded font-bold cursor-pointer ${getTipoStyles(ev.tipo)} hover:brightness-110 transition-all truncate group relative shadow-sm`}>
-                        {ev.titulo}
-                        {isAdmin && (
-                          <button onClick={(e) => { e.stopPropagation(); handleDeleteEvento(ev.$id); }} className="absolute -top-1 -right-1 bg-white dark:bg-slate-800 text-red-600 dark:text-red-400 rounded-full shadow-md p-1 opacity-0 group-hover:opacity-100 transition-opacity border border-slate-200 dark:border-slate-700"><X className="w-3 h-3" /></button>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-          
-          <div className="mt-8 grid grid-cols-2 sm:grid-cols-5 gap-4">
-             {['Examen', 'Excursión', 'Reunión', 'Festivo', 'Otro'].map(type => (
-               <div key={type} className="flex items-center gap-2 py-2 px-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg transition-colors">
-                 <div className={`w-3 h-3 rounded-full ${getTipoStyles(type)} shadow-sm`}></div>
-                 <span className="text-[10px] sm:text-xs font-bold text-slate-500 dark:text-slate-400 tracking-wide uppercase">{type}</span>
-               </div>
-             ))}
-          </div>
-        </div>
+        )}
       </div>
     );
   };
@@ -770,19 +846,11 @@ export default function PortfolioDocente() {
     <button
       onClick={() => { setActiveTab(id); setIsMobileMenuOpen(false); }}
       className={`flex items-center gap-2 px-4 py-3 rounded-xl font-medium transition-all duration-200 w-full md:w-auto
-        ${activeTab === id ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-600 hover:bg-indigo-50 hover:text-indigo-600'}`}
+        ${activeTab === id ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400'}`}
     >
       <Icon className="w-5 h-5" /><span>{label}</span>
     </button>
   );
-
-  if (isLoading) return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50">
-      <Loader2 className="w-12 h-12 text-indigo-600 animate-spin mb-4" />
-      <p className="text-slate-600 font-medium text-lg">Cargando el portfolio...</p>
-    </div>
-  );
-
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 font-sans text-slate-800 dark:text-slate-200 transition-colors duration-300 pb-20">
@@ -979,7 +1047,13 @@ export default function PortfolioDocente() {
               </form>
             )}
             <div className="bg-white dark:bg-slate-900 p-8 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-800 transition-colors">
-              {trayectoria.length === 0 ? (
+              {isLoading ? (
+                <div className="space-y-4">
+                  <SkeletonTrayectoria />
+                  <SkeletonTrayectoria />
+                  <SkeletonTrayectoria />
+                </div>
+              ) : trayectoria.length === 0 ? (
                 <p className="text-slate-500 dark:text-slate-400 italic text-center py-8">Aún no hay hitos ni equipo añadidos.</p>
               ) : (
                 <div className="relative border-l-2 border-slate-100 dark:border-slate-800 ml-3 pl-6 space-y-10 py-2">
@@ -1131,8 +1205,15 @@ export default function PortfolioDocente() {
                 </button>
               </form>
             )}
-            {materiales.length === 0 && !showMaterialForm ? (
-              <div className="text-center py-16 bg-slate-100 rounded-2xl border-2 border-dashed border-slate-300">
+            {isLoading ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <SkeletonMaterial />
+                <SkeletonMaterial />
+                <SkeletonMaterial />
+                <SkeletonMaterial />
+              </div>
+            ) : materiales.length === 0 && !showMaterialForm ? (
+              <div className="text-center py-16 bg-slate-100 dark:bg-slate-800/50 rounded-2xl border-2 border-dashed border-slate-300 dark:border-slate-700">
                 <Shapes className="w-12 h-12 text-slate-400 mx-auto mb-3" />
                 <p className="text-slate-500">Aún no hay materiales subidos.</p>
               </div>
@@ -1244,7 +1325,12 @@ export default function PortfolioDocente() {
             )}
             <div className="space-y-4">
               <h3 className="text-2xl font-bold text-slate-800 border-b pb-2">Banco de Rúbricas y Registros</h3>
-              {evaluaciones.length === 0 ? (
+              {isLoading ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <SkeletonEvaluacion />
+                  <SkeletonEvaluacion />
+                </div>
+              ) : evaluaciones.length === 0 ? (
                 <p className="text-slate-500 italic">No hay evidencias publicadas aún.</p>
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -1347,7 +1433,13 @@ export default function PortfolioDocente() {
               </form>
             )}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {comunicados.length === 0 ? (
+              {isLoading ? (
+                <>
+                  <SkeletonFamilia />
+                  <SkeletonFamilia />
+                  <SkeletonFamilia />
+                </>
+              ) : comunicados.length === 0 ? (
                 <p className="text-slate-500 italic col-span-full">No hay comunicados publicados.</p>
               ) : filteredFamilias.length === 0 ? (
                 <div className="col-span-full text-center py-12 bg-white rounded-2xl border border-slate-200 shadow-sm">
@@ -1426,7 +1518,16 @@ export default function PortfolioDocente() {
               </form>
             )}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {fotos.length === 0 ? (
+              {isLoading ? (
+                <>
+                  <SkeletonGaleria />
+                  <SkeletonGaleria />
+                  <SkeletonGaleria />
+                  <SkeletonGaleria />
+                  <SkeletonGaleria />
+                  <SkeletonGaleria />
+                </>
+              ) : fotos.length === 0 ? (
                 <p className="text-slate-500 dark:text-slate-400 italic col-span-full">No hay fotos publicadas en la galería.</p>
               ) : fotos.map((foto, index) => (
                 <div key={foto.$id} onClick={() => setLightboxIndex(index)} className="group relative rounded-2xl overflow-hidden shadow-sm border border-slate-200 dark:border-slate-800 aspect-square bg-slate-100 dark:bg-slate-900 cursor-pointer transition-colors">
