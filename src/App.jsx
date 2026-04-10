@@ -517,7 +517,7 @@ export default function PortfolioDocente() {
     setNewEvento({ titulo: '', descripcion: '', fecha: '', tipo: 'Reunión' });
   };
 
-  const RenderCalendario = () => {
+  const renderCalendario = () => {
     const daysInMonth = (y, m) => new Date(y, m + 1, 0).getDate();
     const firstDayOfMonth = (y, m) => {
       let d = new Date(y, m, 1).getDay();
@@ -1039,7 +1039,7 @@ export default function PortfolioDocente() {
         )}
 
         {/* CALENDARIO */}
-        {activeTab === 'calendario' && <RenderCalendario />}
+        {activeTab === 'calendario' && renderCalendario()}
 
 
         {/* TRAYECTORIA */}
