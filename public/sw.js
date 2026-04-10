@@ -32,6 +32,13 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
+  const url = new URL(event.request.url);
+
+  // NO interceptar peticiones a otros dominios (APIs externas como Appwrite)
+  if (url.origin !== self.location.origin) {
+    return;
+  }
+
   // Estrategia Network First para las peticiones de navegación (HTML)
   if (event.request.mode === 'navigate') {
     event.respondWith(
