@@ -47,6 +47,19 @@ const getOptimizedUrl = (url, w, h, q = 80) => {
   return `${url}${sep}${params.join('&')}`;
 };
 
+const deleteFileFromUrl = async (url) => {
+  if (!url) return;
+  try {
+    const match = url.match(/\/files\/([a-zA-Z0-9_-]+)\//);
+    if (match && match[1]) {
+      await storage.deleteFile(APPWRITE_BUCKET, match[1]);
+      console.log('Archivo físico eliminado del Storage:', match[1]);
+    }
+  } catch (e) {
+    console.warn('No se pudo eliminar el archivo físico (podría estar ya borrado):', e);
+  }
+};
+
 export default function PortfolioDocente() {
   const [activeTab, setActiveTab] = useState('inicio');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -277,6 +290,8 @@ export default function PortfolioDocente() {
       message: '¿Estás seguro de que quieres eliminar este material? Esta acción no se puede deshacer.',
       onConfirm: async () => {
         try {
+          const doc = materiales.find(m => m.$id === id);
+          if (doc && doc.archivoUrl) await deleteFileFromUrl(doc.archivoUrl);
           await databases.deleteDocument(APPWRITE_DB, COL_MATERIALES, id);
           setMateriales(prev => prev.filter(m => m.$id !== id));
           addToast('Material eliminado', 'success');
@@ -334,6 +349,8 @@ export default function PortfolioDocente() {
       message: '¿Estás seguro de que quieres eliminar esta evidencia?',
       onConfirm: async () => {
         try {
+          const doc = evaluaciones.find(e => e.$id === id);
+          if (doc && doc.archivoUrl) await deleteFileFromUrl(doc.archivoUrl);
           await databases.deleteDocument(APPWRITE_DB, COL_EVALUACION, id);
           setEvaluaciones(prev => prev.filter(e => e.$id !== id));
           addToast('Evidencia eliminada', 'success');
@@ -562,6 +579,8 @@ export default function PortfolioDocente() {
       message: '¿Estás seguro de que quieres eliminar este comunicado a las familias?',
       onConfirm: async () => {
         try {
+          const doc = comunicados.find(c => c.$id === id);
+          if (doc && doc.archivoUrl) await deleteFileFromUrl(doc.archivoUrl);
           await databases.deleteDocument(APPWRITE_DB, COL_FAMILIAS, id);
           setComunicados(prev => prev.filter(c => c.$id !== id));
           addToast('Comunicado eliminado', 'success');
@@ -619,6 +638,8 @@ export default function PortfolioDocente() {
       message: '¿Estás seguro de que quieres eliminar esta foto de la galería?',
       onConfirm: async () => {
         try {
+          const doc = fotos.find(f => f.$id === id);
+          if (doc && doc.imagenUrl) await deleteFileFromUrl(doc.imagenUrl);
           await databases.deleteDocument(APPWRITE_DB, COL_GALERIA, id);
           setFotos(prev => prev.filter(f => f.$id !== id));
           addToast('Foto eliminada', 'success');
