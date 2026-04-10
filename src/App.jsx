@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Reveal } from './components/Reveal';
 import {
   Home, BookOpen, Shapes, Heart, Star, ArrowRight,
   Puzzle, Pencil, Calculator, Users, Plus, X, Loader2, FileText, Upload,
@@ -957,7 +958,8 @@ export default function PortfolioDocente() {
         {/* INICIO */}
         {activeTab === 'inicio' && (
           <div className="space-y-12 animate-in fade-in duration-700">
-            <div className="bg-indigo-900 dark:bg-indigo-950 rounded-3xl overflow-hidden shadow-xl relative transition-colors">
+            <Reveal>
+              <div className="bg-indigo-900 dark:bg-indigo-950 rounded-3xl overflow-hidden shadow-xl relative transition-colors">
               <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-indigo-300 via-transparent to-transparent"></div>
               <div className="px-8 py-10 sm:px-16 sm:py-16 relative z-10 flex flex-col md:flex-row items-center gap-12">
                 <div className="flex-1 space-y-6">
@@ -978,7 +980,9 @@ export default function PortfolioDocente() {
                 </div>
               </div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          </Reveal>
+            <Reveal delay={0.3}>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 flex items-start gap-4 transition-colors">
                 <div className="p-3 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-xl"><Users className="w-6 h-6" /></div>
                 <div><h3 className="font-bold text-slate-800 dark:text-white text-lg">Inclusión Real</h3><p className="text-slate-500 dark:text-slate-400 text-sm mt-1">Materiales multinivel adaptados al Diseño Universal para el Aprendizaje (DUA).</p></div>
@@ -992,6 +996,7 @@ export default function PortfolioDocente() {
                 <div><h3 className="font-bold text-slate-800 dark:text-white text-lg">Manipulativo</h3><p className="text-slate-500 dark:text-slate-400 text-sm mt-1">Aprender tocando y experimentando, respetando la etapa evolutiva del primer ciclo.</p></div>
               </div>
             </div>
+          </Reveal>
           </div>
         )}
 
@@ -1065,23 +1070,25 @@ export default function PortfolioDocente() {
                     else if (item.categoria === 'Otro') { Icono = Star; colorConfig = 'text-blue-600 bg-blue-100 ring-blue-50 dark:text-blue-400 dark:bg-blue-900/30 dark:ring-blue-950'; }
                     const [textColor, bgColor, ringColor] = colorConfig.split(' ');
                     return (
-                      <div key={item.$id} className="relative group">
-                        <div className={`absolute -left-[2.1rem] top-1 w-8 h-8 rounded-full ring-4 ring-white dark:ring-slate-900 flex items-center justify-center shadow-sm ${bgColor} ${ringColor} transition-colors`}>
-                          <Icono className={`w-4 h-4 ${textColor}`} />
-                        </div>
-                        {isAdmin && (
-                          <div className="absolute top-0 right-0 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity bg-white/90 dark:bg-slate-800/90 p-1 rounded-lg">
-                            <button onClick={() => triggerEditTrayectoria(item)} className="p-1.5 text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"><Edit className="w-4 h-4" /></button>
-                            <button onClick={() => handleDeleteTrayectoria(item.$id)} className="p-1.5 text-slate-400 hover:text-red-600 dark:hover:text-red-400 transition-colors"><Trash2 className="w-4 h-4" /></button>
+                      <Reveal key={item.$id} delay={0.1}>
+                        <div className="relative group">
+                          <div className={`absolute -left-[2.1rem] top-1 w-8 h-8 rounded-full ring-4 ring-white dark:ring-slate-900 flex items-center justify-center shadow-sm ${bgColor} ${ringColor} transition-colors`}>
+                            <Icono className={`w-4 h-4 ${textColor}`} />
                           </div>
-                        )}
-                        <div className="pr-16">
-                          <span className="text-sm font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">{item.fecha}</span>
-                          <h3 className="text-xl font-bold text-slate-800 dark:text-white mt-1">{item.titulo}</h3>
-                          <h4 className="text-md font-semibold text-indigo-600 dark:text-indigo-400 mb-2">{item.subtitulo}</h4>
-                          {item.descripcion && <p className="text-slate-600 dark:text-slate-400 leading-relaxed text-sm">{item.descripcion}</p>}
+                          {isAdmin && (
+                            <div className="absolute top-0 right-0 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity bg-white/90 dark:bg-slate-800/90 p-1 rounded-lg">
+                              <button onClick={() => triggerEditTrayectoria(item)} className="p-1.5 text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"><Edit className="w-4 h-4" /></button>
+                              <button onClick={() => handleDeleteTrayectoria(item.$id)} className="p-1.5 text-slate-400 hover:text-red-600 dark:hover:text-red-400 transition-colors"><Trash2 className="w-4 h-4" /></button>
+                            </div>
+                          )}
+                          <div className="pr-16">
+                            <span className="text-sm font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">{item.fecha}</span>
+                            <h3 className="text-xl font-bold text-slate-800 dark:text-white mt-1">{item.titulo}</h3>
+                            <h4 className="text-md font-semibold text-indigo-600 dark:text-indigo-400 mb-2">{item.subtitulo}</h4>
+                            {item.descripcion && <p className="text-slate-600 dark:text-slate-400 leading-relaxed text-sm">{item.descripcion}</p>}
+                          </div>
                         </div>
-                      </div>
+                      </Reveal>
                     );
                   })}
                 </div>
@@ -1093,51 +1100,59 @@ export default function PortfolioDocente() {
         {/* METODOLOGÍA */}
         {activeTab === 'metodologia' && (
           <div className="space-y-10 animate-in fade-in duration-500">
-            <div className="max-w-3xl">
-              <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white mb-4">El Motor de Nuestra Aula</h2>
-              <p className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed">Trabajar por estaciones no es solo organizar mesas diferentes; es una profunda transformación metodológica basada en la equidad y el respeto a la diversidad.</p>
-            </div>
+            <Reveal>
+              <div className="max-w-3xl">
+                <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white mb-4">El Motor de Nuestra Aula</h2>
+                <p className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed">Trabajar por estaciones no es solo organizar mesas diferentes; es una profunda transformación metodológica basada en la equidad y el respeto a la diversidad.</p>
+              </div>
+            </Reveal>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              <div className="bg-white dark:bg-slate-900 p-8 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-800 transition-colors">
-                <h3 className="text-2xl font-bold text-indigo-600 dark:text-indigo-400 mb-4">¿En qué consiste?</h3>
-                <p className="text-slate-600 dark:text-slate-400 leading-relaxed text-justify mb-4">El proyecto consiste en la implementación de 'Estaciones de Aprendizaje' en el 1º ciclo de Primaria como respuesta inclusiva a la diversidad del aula.</p>
-                <p className="text-slate-600 dark:text-slate-400 leading-relaxed text-justify">Esta práctica transforma el aula tradicional en un ecosistema flexible que respeta los diferentes ritmos madurativos, garantizando la participación y el éxito de todo el grupo.</p>
-              </div>
-              <div className="bg-white dark:bg-slate-900 p-8 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-800 transition-colors">
-                <h3 className="text-2xl font-bold text-indigo-600 dark:text-indigo-400 mb-4">¿Cómo funciona?</h3>
-                <p className="text-slate-600 dark:text-slate-400 leading-relaxed text-justify mb-4">El aula se organiza dinámicamente en 5 estaciones simultáneas con propuestas multinivel, diseñadas bajo el DUA:</p>
-                <ul className="space-y-3 mb-6">
-                  <li className="flex items-start gap-2"><div className="w-2 h-2 rounded-full bg-indigo-500 mt-1.5 shrink-0"></div><span className="text-slate-700 dark:text-slate-300 text-sm"><strong className="text-indigo-900 dark:text-indigo-400">Juego simbólico:</strong> Desarrollo social, roles y lenguaje oral.</span></li>
-                  <li className="flex items-start gap-2"><div className="w-2 h-2 rounded-full bg-pink-500 mt-1.5 shrink-0"></div><span className="text-slate-700 dark:text-slate-300 text-sm"><strong className="text-pink-900 dark:text-pink-400">Lecto-escritura:</strong> Conciencia fonológica, trazo, lectura y comprensión.</span></li>
-                  <li className="flex items-start gap-2"><div className="w-2 h-2 rounded-full bg-blue-500 mt-1.5 shrink-0"></div><span className="text-slate-700 dark:text-slate-300 text-sm"><strong className="text-blue-900 dark:text-blue-400">Lógico-matemática:</strong> Numeración, cálculo manipulativo y problemas.</span></li>
-                  <li className="flex items-start gap-2"><div className="w-2 h-2 rounded-full bg-amber-500 mt-1.5 shrink-0"></div><span className="text-slate-700 dark:text-slate-300 text-sm"><strong className="text-amber-900 dark:text-amber-400">Mentalandia:</strong> Funciones ejecutivas, atención, memoria y retos espaciales.</span></li>
-                  <li className="flex items-start gap-2"><div className="w-2 h-2 rounded-full bg-emerald-500 mt-1.5 shrink-0"></div><span className="text-slate-700 dark:text-slate-300 text-sm"><strong className="text-emerald-900 dark:text-emerald-400">Sabiómetro (Dirigida):</strong> Evaluación de progresos, refuerzo directo o ampliación.</span></li>
-                </ul>
-              </div>
-              <div className="bg-slate-900 text-white p-8 sm:p-12 rounded-3xl shadow-md lg:col-span-2 relative overflow-hidden">
-                <div className="absolute top-0 right-0 p-8 opacity-10"><BookOpen className="w-64 h-64" /></div>
-                <div className="relative z-10 max-w-4xl">
-                  <h3 className="text-3xl font-extrabold text-amber-400 mb-8">Fundamentación Pedagógica y Curricular</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                    <div>
-                      <h4 className="text-xl font-bold text-indigo-300 mb-4 border-b border-indigo-800/50 pb-2">Marco Pedagógico</h4>
-                      <ul className="space-y-4 text-slate-300 text-base leading-relaxed">
-                        <li><strong className="text-white block mb-1">Constructivismo y Vygotsky</strong> El aprendizaje es social. El trabajo cooperativo activa la <em>Zona de Desarrollo Próximo</em> mediante andamiaje y tutoría entre iguales.</li>
-                        <li><strong className="text-white block mb-1">Diseño Universal para el Aprendizaje (DUA)</strong> Garantiza la inclusión desde la planificación, ofreciendo múltiples formas de representación, expresión e implicación.</li>
-                        <li><strong className="text-white block mb-1">Neuroeducación</strong> El enfoque lúdico favorece la emoción y la memoria. La estación "Mentalandia" entrena directamente las funciones ejecutivas.</li>
-                      </ul>
-                    </div>
-                    <div>
-                      <h4 className="text-xl font-bold text-emerald-300 mb-4 border-b border-emerald-800/50 pb-2">Marco Curricular (LOMLOE)</h4>
-                      <ul className="space-y-4 text-slate-300 text-base leading-relaxed">
-                        <li><strong className="text-white block mb-1">Enfoque Competencial</strong> Las estaciones plantean retos que movilizan <em>saberes básicos</em> en situaciones reales, contribuyendo al Perfil de Salida.</li>
-                        <li><strong className="text-white block mb-1">Inclusión y Equidad (Art. 4)</strong> Medida ordinaria de atención a la diversidad que evita la segregación y enriquece el entorno del aula.</li>
-                        <li><strong className="text-white block mb-1">Evaluación Formativa</strong> La estación "Sabiómetro" permite una evaluación continua, observacional y reguladora del proceso.</li>
-                      </ul>
+              <Reveal delay={0.1}>
+                <div className="bg-white dark:bg-slate-900 p-8 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-800 transition-colors h-full">
+                  <h3 className="text-2xl font-bold text-indigo-600 dark:text-indigo-400 mb-4">¿En qué consiste?</h3>
+                  <p className="text-slate-600 dark:text-slate-400 leading-relaxed text-justify mb-4">El proyecto consiste en la implementación de 'Estaciones de Aprendizaje' en el 1º ciclo de Primaria como respuesta inclusiva a la diversidad del aula.</p>
+                  <p className="text-slate-600 dark:text-slate-400 leading-relaxed text-justify">Esta práctica transforma el aula tradicional en un ecosistema flexible que respeta los diferentes ritmos madurativos, garantizando la participación y el éxito de todo el grupo.</p>
+                </div>
+              </Reveal>
+              <Reveal delay={0.2}>
+                <div className="bg-white dark:bg-slate-900 p-8 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-800 transition-colors h-full">
+                  <h3 className="text-2xl font-bold text-indigo-600 dark:text-indigo-400 mb-4">¿Cómo funciona?</h3>
+                  <p className="text-slate-600 dark:text-slate-400 leading-relaxed text-justify mb-4">El aula se organiza dinámicamente en 5 estaciones simultáneas con propuestas multinivel, diseñadas bajo el DUA:</p>
+                  <ul className="space-y-3 mb-6">
+                    <li className="flex items-start gap-2"><div className="w-2 h-2 rounded-full bg-indigo-500 mt-1.5 shrink-0"></div><span className="text-slate-700 dark:text-slate-300 text-sm"><strong className="text-indigo-900 dark:text-indigo-400">Juego simbólico:</strong> Desarrollo social, roles y lenguaje oral.</span></li>
+                    <li className="flex items-start gap-2"><div className="w-2 h-2 rounded-full bg-pink-500 mt-1.5 shrink-0"></div><span className="text-slate-700 dark:text-slate-300 text-sm"><strong className="text-pink-900 dark:text-pink-400">Lecto-escritura:</strong> Conciencia fonológica, trazo, lectura y comprensión.</span></li>
+                    <li className="flex items-start gap-2"><div className="w-2 h-2 rounded-full bg-blue-500 mt-1.5 shrink-0"></div><span className="text-slate-700 dark:text-slate-300 text-sm"><strong className="text-blue-900 dark:text-blue-400">Lógico-matemática:</strong> Numeración, cálculo manipulativo y problemas.</span></li>
+                    <li className="flex items-start gap-2"><div className="w-2 h-2 rounded-full bg-amber-500 mt-1.5 shrink-0"></div><span className="text-slate-700 dark:text-slate-300 text-sm"><strong className="text-amber-900 dark:text-amber-400">Mentalandia:</strong> Funciones ejecutivas, atención, memoria y retos espaciales.</span></li>
+                    <li className="flex items-start gap-2"><div className="w-2 h-2 rounded-full bg-emerald-500 mt-1.5 shrink-0"></div><span className="text-slate-700 dark:text-slate-300 text-sm"><strong className="text-emerald-900 dark:text-emerald-400">Sabiómetro (Dirigida):</strong> Evaluación de progresos, refuerzo directo o ampliación.</span></li>
+                  </ul>
+                </div>
+              </Reveal>
+              <Reveal delay={0.3}>
+                <div className="bg-slate-900 text-white p-8 sm:p-12 rounded-3xl shadow-md lg:col-span-2 relative overflow-hidden h-full">
+                  <div className="absolute top-0 right-0 p-8 opacity-10"><BookOpen className="w-64 h-64" /></div>
+                  <div className="relative z-10 max-w-4xl">
+                    <h3 className="text-3xl font-extrabold text-amber-400 mb-8">Fundamentación Pedagógica y Curricular</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                      <div>
+                        <h4 className="text-xl font-bold text-indigo-300 mb-4 border-b border-indigo-800/50 pb-2">Marco Pedagógico</h4>
+                        <ul className="space-y-4 text-slate-300 text-base leading-relaxed">
+                          <li><strong className="text-white block mb-1">Constructivismo y Vygotsky</strong> El aprendizaje es social. El trabajo cooperativo activa la <em>Zona de Desarrollo Próximo</em> mediante andamiaje y tutoría entre iguales.</li>
+                          <li><strong className="text-white block mb-1">Diseño Universal para el Aprendizaje (DUA)</strong> Garantiza la inclusión desde la planificación, ofreciendo múltiples formas de representación, expresión e implicación.</li>
+                          <li><strong className="text-white block mb-1">Neuroeducación</strong> El enfoque lúdico favorece la emoción y la memoria. La estación "Mentalandia" entrena directamente las funciones ejecutivas.</li>
+                        </ul>
+                      </div>
+                      <div>
+                        <h4 className="text-xl font-bold text-emerald-300 mb-4 border-b border-emerald-800/50 pb-2">Marco Curricular (LOMLOE)</h4>
+                        <ul className="space-y-4 text-slate-300 text-base leading-relaxed">
+                          <li><strong className="text-white block mb-1">Enfoque Competencial</strong> Las estaciones plantean retos que movilizan <em>saberes básicos</em> en situaciones reales, contribuyendo al Perfil de Salida.</li>
+                          <li><strong className="text-white block mb-1">Inclusión y Equidad (Art. 4)</strong> Medida ordinaria de atención a la diversidad que evita la segregación y enriquece el entorno del aula.</li>
+                          <li><strong className="text-white block mb-1">Evaluación Formativa</strong> La estación "Sabiómetro" permite una evaluación continua, observacional y reguladora del proceso.</li>
+                        </ul>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              </Reveal>
             </div>
           </div>
         )}
@@ -1146,17 +1161,19 @@ export default function PortfolioDocente() {
         {/* MATERIALES */}
         {activeTab === 'materiales' && (
           <div className="space-y-8 animate-in fade-in duration-500">
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
-              <div>
-                <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white">Banco de Materiales</h2>
-                <p className="text-slate-600 dark:text-slate-400 mt-2">Recursos organizados por categorías.</p>
+            <Reveal>
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+                <div>
+                  <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white">Banco de Materiales</h2>
+                  <p className="text-slate-600 dark:text-slate-400 mt-2">Recursos organizados por categorías.</p>
+                </div>
+                {isAdmin && (
+                  <button onClick={() => setShowMaterialForm(true)} className="bg-indigo-600 text-white px-5 py-2.5 rounded-xl font-bold hover:bg-indigo-700 transition-colors flex items-center gap-2 shadow-md">
+                    <Plus className="w-5 h-5" /> Subir Recurso
+                  </button>
+                )}
               </div>
-              {isAdmin && (
-                <button onClick={() => setShowMaterialForm(true)} className="bg-indigo-600 text-white px-5 py-2.5 rounded-xl font-bold hover:bg-indigo-700 transition-colors flex items-center gap-2 shadow-md">
-                  <Plus className="w-5 h-5" /> Subir Recurso
-                </button>
-              )}
-            </div>
+            </Reveal>
             {!showMaterialForm && materiales.length > 0 && (
               <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 mb-6 flex flex-col lg:flex-row gap-4 transition-colors">
                 <div className="relative flex-1">
@@ -1225,29 +1242,31 @@ export default function PortfolioDocente() {
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {filteredMateriales.slice(0, visibleMateriales).map(mat => (
-                  <div key={mat.$id} className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden flex flex-col sm:flex-row hover:shadow-md transition-all relative group">
-                    {isAdmin && (
-                      <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity bg-white/90 dark:bg-slate-800/90 p-1 rounded-lg shadow-sm">
-                        <button onClick={() => triggerEditMaterial(mat)} className="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900 rounded-md transition-colors"><Edit className="w-4 h-4" /></button>
-                        <button onClick={() => handleDeleteMaterial(mat.$id)} className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900 rounded-md transition-colors"><Trash2 className="w-4 h-4" /></button>
-                      </div>
-                    )}
-                    <div className={`sm:w-32 flex-shrink-0 flex items-center justify-center p-6 ${getCategoryColor(mat.categoria)} dark:opacity-90 border-b sm:border-b-0 sm:border-r dark:border-slate-800 transition-colors`}>{getCategoryIcon(mat.categoria)}</div>
-                    <div className="p-6 flex-1 flex flex-col justify-center">
-                      <div className="flex justify-between items-start gap-4 mb-1">
-                        <span className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">{mat.categoria}</span>
-                        {mat.$createdAt && <span className="text-xs font-bold text-slate-400 dark:text-slate-500 shrink-0">{new Date(mat.$createdAt).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })}</span>}
-                      </div>
-                      <h3 className="text-xl font-bold text-slate-800 dark:text-white mb-2 pr-12 lg:pr-0">{mat.titulo}</h3>
-                      <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-3">{mat.descripcion}</p>
-                      {mat.archivoUrl && (
-                        <a href={mat.archivoUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-sm font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 w-fit bg-indigo-50 dark:bg-indigo-900/40 px-3 py-1.5 rounded-lg transition-colors mt-auto">
-                          <FileText className="w-4 h-4" /> Ver {mat.archivoNombre || 'PDF'}
-                        </a>
+                {filteredMateriales.slice(0, visibleMateriales).map((mat, idx) => (
+                  <Reveal key={mat.$id} delay={0.1 * (idx % 6)}>
+                    <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden flex flex-col sm:flex-row hover:shadow-md transition-all relative group h-full">
+                      {isAdmin && (
+                        <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity bg-white/90 dark:bg-slate-800/90 p-1 rounded-lg shadow-sm">
+                          <button onClick={() => triggerEditMaterial(mat)} className="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900 rounded-md transition-colors"><Edit className="w-4 h-4" /></button>
+                          <button onClick={() => handleDeleteMaterial(mat.$id)} className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900 rounded-md transition-colors"><Trash2 className="w-4 h-4" /></button>
+                        </div>
                       )}
+                      <div className={`sm:w-32 flex-shrink-0 flex items-center justify-center p-6 ${getCategoryColor(mat.categoria)} dark:opacity-90 border-b sm:border-b-0 sm:border-r dark:border-slate-800 transition-colors`}>{getCategoryIcon(mat.categoria)}</div>
+                      <div className="p-6 flex-1 flex flex-col justify-center">
+                        <div className="flex justify-between items-start gap-4 mb-1">
+                          <span className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">{mat.categoria}</span>
+                          {mat.$createdAt && <span className="text-xs font-bold text-slate-400 dark:text-slate-500 shrink-0">{new Date(mat.$createdAt).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })}</span>}
+                        </div>
+                        <h3 className="text-xl font-bold text-slate-800 dark:text-white mb-2 pr-12 lg:pr-0">{mat.titulo}</h3>
+                        <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-3">{mat.descripcion}</p>
+                        {mat.archivoUrl && (
+                          <a href={mat.archivoUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-sm font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 w-fit bg-indigo-50 dark:bg-indigo-900/40 px-3 py-1.5 rounded-lg transition-colors mt-auto">
+                            <FileText className="w-4 h-4" /> Ver {mat.archivoNombre || 'PDF'}
+                          </a>
+                        )}
+                      </div>
                     </div>
-                  </div>
+                  </Reveal>
                 ))}
               </div>
             )}
@@ -1264,17 +1283,19 @@ export default function PortfolioDocente() {
         {/* EVALUACIÓN */}
         {activeTab === 'evaluacion' && (
           <div className="space-y-10 animate-in fade-in duration-500">
-            <div className="flex justify-between items-start sm:items-center gap-4">
-              <div>
-                <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white">Evaluación y Evidencias</h2>
-                <p className="text-slate-600 dark:text-slate-400 mt-2 text-lg">Cómo medimos el progreso respetando los ritmos de cada alumno.</p>
+            <Reveal>
+              <div className="flex justify-between items-start sm:items-center gap-4">
+                <div>
+                  <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white">Evaluación y Evidencias</h2>
+                  <p className="text-slate-600 dark:text-slate-400 mt-2 text-lg">Cómo medimos el progreso respetando los ritmos de cada alumno.</p>
+                </div>
+                {isAdmin && (
+                  <button onClick={() => setShowEvaluacionForm(true)} className="bg-indigo-600 text-white px-5 py-2.5 rounded-xl font-bold hover:bg-indigo-700 transition-colors flex items-center gap-2 shadow-md">
+                    <Plus className="w-5 h-5" /> Nueva Evidencia
+                  </button>
+                )}
               </div>
-              {isAdmin && (
-                <button onClick={() => setShowEvaluacionForm(true)} className="bg-indigo-600 text-white px-5 py-2.5 rounded-xl font-bold hover:bg-indigo-700 transition-colors flex items-center gap-2 shadow-md">
-                  <Plus className="w-5 h-5" /> Nueva Evidencia
-                </button>
-              )}
-            </div>
+            </Reveal>
             {isAdmin && showEvaluacionForm && (
               <form onSubmit={handleSaveEvaluacion} className="bg-white p-6 rounded-2xl shadow-lg border border-indigo-100 relative animate-in slide-in-from-top-4">
                 <button type="button" onClick={cerrarFormularioEvaluacion} className="absolute top-4 right-4 text-slate-400 hover:text-slate-600"><X className="w-6 h-6" /></button>
@@ -1334,8 +1355,9 @@ export default function PortfolioDocente() {
                 <p className="text-slate-500 italic">No hay evidencias publicadas aún.</p>
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {evaluaciones.map(ev => (
-                    <div key={ev.$id} className="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-col relative group hover:shadow-md transition-shadow">
+                  {evaluaciones.map((ev, idx) => (
+                    <Reveal key={ev.$id} delay={0.1 * (idx % 6)}>
+                      <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-col relative group hover:shadow-md transition-shadow h-full">
                       {isAdmin && (
                         <div className="absolute top-3 right-3 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                           <button onClick={() => triggerEditEvaluacion(ev)} className="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-md transition-colors"><Edit className="w-4 h-4" /></button>
@@ -1350,6 +1372,7 @@ export default function PortfolioDocente() {
                         </a>
                       )}
                     </div>
+                    </Reveal>
                   ))}
                 </div>
               )}
@@ -1453,25 +1476,27 @@ export default function PortfolioDocente() {
                 if (com.tipo === 'Recurso') badgeColor = 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300';
                 if (com.tipo === 'Consejo') badgeColor = 'bg-pink-100 text-pink-800 dark:bg-pink-900/40 dark:text-pink-300';
                 return (
-                  <div key={com.$id} className="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 flex flex-col hover:shadow-md transition-all relative group transition-colors">
-                    {isAdmin && (
-                      <div className="absolute top-4 right-4 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity bg-white/90 dark:bg-slate-800/90 p-1 rounded-lg">
-                        <button onClick={() => triggerEditFamilia(com)} className="p-1 text-slate-400 hover:text-blue-600 transition-colors"><Edit className="w-4 h-4" /></button>
-                        <button onClick={() => handleDeleteFamilia(com.$id)} className="p-1 text-slate-400 hover:text-red-600 transition-colors"><Trash2 className="w-4 h-4" /></button>
+                  <Reveal key={com.$id} delay={0.1}>
+                    <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 flex flex-col hover:shadow-md transition-all relative group transition-colors">
+                      {isAdmin && (
+                        <div className="absolute top-4 right-4 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity bg-white/90 dark:bg-slate-800/90 p-1 rounded-lg">
+                          <button onClick={() => triggerEditFamilia(com)} className="p-1 text-slate-400 hover:text-blue-600 transition-colors"><Edit className="w-4 h-4" /></button>
+                          <button onClick={() => handleDeleteFamilia(com.$id)} className="p-1 text-slate-400 hover:text-red-600 transition-colors"><Trash2 className="w-4 h-4" /></button>
+                        </div>
+                      )}
+                      <div className="flex justify-between items-start mb-2">
+                         <span className={`w-fit text-xs font-bold px-2 py-1 rounded uppercase tracking-wide ${badgeColor}`}>{com.tipo}</span>
+                         {com.$createdAt && <span className="text-xs font-bold text-slate-400 mt-1">{new Date(com.$createdAt).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}</span>}
                       </div>
-                    )}
-                    <div className="flex justify-between items-start mb-2">
-                       <span className={`w-fit text-xs font-bold px-2 py-1 rounded uppercase tracking-wide ${badgeColor}`}>{com.tipo}</span>
-                       {com.$createdAt && <span className="text-xs font-bold text-slate-400 mt-1">{new Date(com.$createdAt).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}</span>}
+                      <h3 className="text-xl font-bold text-slate-800 dark:text-white mt-1 mb-2 pr-12">{com.titulo}</h3>
+                      <div className="text-slate-600 dark:text-slate-300 text-sm mb-4 leading-relaxed prose prose-sm dark:prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: com.descripcion }}></div>
+                      {com.archivoUrl && (
+                        <a href={com.archivoUrl} target="_blank" rel="noopener noreferrer" className="mt-auto inline-flex items-center gap-1.5 text-sm font-bold text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors">
+                          <FileText className="w-4 h-4"/> Abrir Adjunto
+                        </a>
+                      )}
                     </div>
-                    <h3 className="text-xl font-bold text-slate-800 dark:text-white mt-1 mb-2 pr-12">{com.titulo}</h3>
-                    <div className="text-slate-600 dark:text-slate-300 text-sm mb-4 leading-relaxed prose prose-sm dark:prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: com.descripcion }}></div>
-                    {com.archivoUrl && (
-                      <a href={com.archivoUrl} target="_blank" rel="noopener noreferrer" className="mt-auto inline-flex items-center gap-1.5 text-sm font-bold text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors">
-                        <FileText className="w-4 h-4"/> Abrir Adjunto
-                      </a>
-                    )}
-                  </div>
+                  </Reveal>
                 );
               })}
             </div>
@@ -1481,17 +1506,19 @@ export default function PortfolioDocente() {
         {/* GALERÍA */}
         {activeTab === 'galeria' && (
           <div className="space-y-8 animate-in fade-in duration-500">
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 mb-8">
-              <div>
-                <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white">Galería de Espacios</h2>
-                <p className="text-slate-600 dark:text-slate-400 mt-2">Un vistazo a nuestro día a día en el aula.</p>
+            <Reveal>
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 mb-8">
+                <div>
+                  <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white">Galería de Espacios</h2>
+                  <p className="text-slate-600 dark:text-slate-400 mt-2">Un vistazo a nuestro día a día en el aula.</p>
+                </div>
+                {isAdmin && (
+                  <button onClick={() => setShowGaleriaForm(true)} className="bg-indigo-600 text-white px-5 py-2.5 rounded-xl font-bold hover:bg-indigo-700 transition-colors flex items-center gap-2 shadow-md shrink-0">
+                    <Camera className="w-5 h-5" /> Subir Foto
+                  </button>
+                )}
               </div>
-              {isAdmin && (
-                <button onClick={() => setShowGaleriaForm(true)} className="bg-indigo-600 text-white px-5 py-2.5 rounded-xl font-bold hover:bg-indigo-700 transition-colors flex items-center gap-2 shadow-md shrink-0">
-                  <Camera className="w-5 h-5" /> Subir Foto
-                </button>
-              )}
-            </div>
+            </Reveal>
             {isAdmin && showGaleriaForm && (
               <form onSubmit={handleSaveFoto} className="bg-white p-6 rounded-2xl shadow-lg border border-indigo-100 mb-8 relative animate-in slide-in-from-top-4">
                 <button type="button" onClick={cerrarFormularioFoto} className="absolute top-4 right-4 text-slate-400 hover:text-slate-600"><X className="w-6 h-6" /></button>
@@ -1530,29 +1557,31 @@ export default function PortfolioDocente() {
               ) : fotos.length === 0 ? (
                 <p className="text-slate-500 dark:text-slate-400 italic col-span-full">No hay fotos publicadas en la galería.</p>
               ) : fotos.map((foto, index) => (
-                <div key={foto.$id} onClick={() => setLightboxIndex(index)} className="group relative rounded-2xl overflow-hidden shadow-sm border border-slate-200 dark:border-slate-800 aspect-square bg-slate-100 dark:bg-slate-900 cursor-pointer transition-colors">
-                  {isAdmin && (
-                    <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity z-30 bg-white/80 p-1 rounded-lg backdrop-blur-sm">
-                      <button onClick={e => { e.stopPropagation(); triggerEditFoto(foto); }} className="p-1.5 text-slate-700 hover:text-indigo-600 transition-colors"><Edit className="w-4 h-4" /></button>
-                      <button onClick={e => { e.stopPropagation(); handleDeleteFoto(foto.$id); }} className="p-1.5 text-slate-700 hover:text-red-600 transition-colors"><Trash2 className="w-4 h-4" /></button>
+                <Reveal key={foto.$id} delay={0.1 * (index % 6)}>
+                  <div onClick={() => setLightboxIndex(index)} className="group relative rounded-2xl overflow-hidden shadow-sm border border-slate-200 dark:border-slate-800 aspect-square bg-slate-100 dark:bg-slate-900 cursor-pointer transition-colors h-full w-full">
+                    {isAdmin && (
+                      <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity z-30 bg-white/80 p-1 rounded-lg backdrop-blur-sm">
+                        <button onClick={e => { e.stopPropagation(); triggerEditFoto(foto); }} className="p-1.5 text-slate-700 hover:text-indigo-600 transition-colors"><Edit className="w-4 h-4" /></button>
+                        <button onClick={e => { e.stopPropagation(); handleDeleteFoto(foto.$id); }} className="p-1.5 text-slate-700 hover:text-red-600 transition-colors"><Trash2 className="w-4 h-4" /></button>
+                      </div>
+                    )}
+                    {foto.imagenUrl ? (
+                      <img src={getOptimizedUrl(foto.imagenUrl, 600, 400)} alt={foto.titulo} loading="lazy" decoding="async" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                    ) : (
+                      <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-400 text-sm text-center p-4 gap-2">
+                        <Camera className="w-8 h-8 opacity-40" /><span className="italic">{foto.titulo}</span>
+                      </div>
+                    )}
+                    <div className="absolute inset-0 bg-slate-900/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center z-10">
+                      <div className="bg-white/90 p-3 rounded-full transform scale-50 group-hover:scale-100 transition-transform duration-300 shadow-lg">
+                        <Maximize2 className="w-6 h-6 text-slate-800" />
+                      </div>
                     </div>
-                  )}
-                  {foto.imagenUrl ? (
-                    <img src={getOptimizedUrl(foto.imagenUrl, 600, 400)} alt={foto.titulo} loading="lazy" decoding="async" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
-                  ) : (
-                    <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-400 text-sm text-center p-4 gap-2">
-                      <Camera className="w-8 h-8 opacity-40" /><span className="italic">{foto.titulo}</span>
-                    </div>
-                  )}
-                  <div className="absolute inset-0 bg-slate-900/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center z-10">
-                    <div className="bg-white/90 p-3 rounded-full transform scale-50 group-hover:scale-100 transition-transform duration-300 shadow-lg">
-                      <Maximize2 className="w-6 h-6 text-slate-800" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6 z-20 pointer-events-none">
+                      <span className="text-white font-medium pr-8">{foto.titulo}</span>
                     </div>
                   </div>
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6 z-20 pointer-events-none">
-                    <span className="text-white font-medium pr-8">{foto.titulo}</span>
-                  </div>
-                </div>
+                </Reveal>
               ))}
             </div>
           </div>
