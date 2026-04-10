@@ -5,7 +5,7 @@ import {
   Puzzle, Pencil, Calculator, Users, Plus, X, Loader2, FileText, Upload,
   LineChart, MessageCircle, Camera, Edit, Trash2, Lock, Unlock,
   Briefcase, GraduationCap, Award, ChevronLeft, ChevronRight, Maximize2, Search,
-  Sun, Moon
+  Sun, Moon, Calendar
 } from 'lucide-react';
 import { Client, Account, Databases, Storage, ID, Query } from 'appwrite';
 import ReactQuill from 'react-quill';
@@ -543,6 +543,8 @@ export default function PortfolioDocente() {
       }
     };
 
+    const [viewEvento, setViewEvento] = useState(null);
+
     return (
       <div className="space-y-8 animate-in fade-in duration-500">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
@@ -618,7 +620,7 @@ export default function PortfolioDocente() {
                     <span className={`text-sm font-bold ${isToday ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-500 dark:text-slate-400'}`}>{d}</span>
                     <div className="mt-2 space-y-1">
                       {dayEvents.map(ev => (
-                        <div key={ev.$id} onClick={() => isAdmin && triggerEditEvento(ev)} className={`text-[10px] sm:text-xs p-1 sm:p-1.5 rounded font-bold cursor-pointer ${getTipoStyles(ev.tipo)} hover:brightness-110 transition-all truncate group relative shadow-sm`}>
+                        <div key={ev.$id} onClick={() => setViewEvento(ev)} className={`text-[10px] sm:text-xs p-1.5 rounded-lg font-bold cursor-pointer ${getTipoStyles(ev.tipo)} hover:scale-105 transition-all truncate shadow-sm relative group`}>
                           {ev.titulo}
                           {isAdmin && (
                             <button onClick={(e) => { e.stopPropagation(); handleDeleteEvento(ev.$id); }} className="absolute -top-1 -right-1 bg-white dark:bg-slate-800 text-red-600 dark:text-red-400 rounded-full shadow-md p-1 opacity-0 group-hover:opacity-100 transition-opacity border border-slate-200 dark:border-slate-700"><X className="w-3 h-3" /></button>
@@ -639,6 +641,36 @@ export default function PortfolioDocente() {
                  </div>
                ))}
             </div>
+
+            {/* EVENT VIEWER MODAL */}
+            {viewEvento && (
+              <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
+                <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-2xl w-full max-w-md p-8 relative animate-in zoom-in-95 border border-slate-100 dark:border-slate-800">
+                  <button onClick={() => setViewEvento(null)} className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 bg-slate-50 dark:bg-slate-800 rounded-full p-1"><X className="w-6 h-6" /></button>
+                  <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 shadow-lg ${getTipoStyles(viewEvento.tipo)}`}>
+                    <Calendar className="w-7 h-7 text-white" />
+                  </div>
+                  <div className="mb-2 flex items-center gap-2">
+                    <span className="text-sm font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">{viewEvento.fecha.split('-').reverse().join('/')}</span>
+                    <span className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded-full ${getTipoStyles(viewEvento.tipo)} opacity-90`}>{viewEvento.tipo}</span>
+                  </div>
+                  <h2 className="text-2xl font-extrabold text-slate-800 dark:text-white mb-4 leading-tight">{viewEvento.titulo}</h2>
+                  {viewEvento.descripcion ? (
+                    <div className="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-800">
+                      <p className="text-slate-600 dark:text-slate-300 leading-relaxed">{viewEvento.descripcion}</p>
+                    </div>
+                  ) : (
+                    <p className="text-slate-400 italic font-medium">No hay detalles adicionales para este evento.</p>
+                  )}
+                  {isAdmin && (
+                    <button onClick={() => { setViewEvento(null); triggerEditEvento(viewEvento); }} className="mt-6 w-full py-3 bg-indigo-50 text-indigo-600 dark:bg-indigo-900/40 dark:text-indigo-400 font-bold rounded-xl hover:bg-indigo-100 dark:hover:bg-indigo-900/60 transition-colors flex items-center justify-center gap-2">
+                      <Edit className="w-4 h-4" /> Editar Evento
+                    </button>
+                  )}
+                </div>
+              </div>
+            )}
+
           </div>
         )}
       </div>
@@ -921,7 +953,7 @@ export default function PortfolioDocente() {
                <NavButton id="metodologia" label="Método" icon={BookOpen} />
                <NavButton id="materiales" label="Materiales" icon={Shapes} />
                <NavButton id="evaluacion" label="Evaluación" icon={LineChart} />
-               <NavButton id="calendario" label="Calendario" icon={Users} />
+               <NavButton id="calendario" label="Calendario" icon={Calendar} />
                <NavButton id="familias" label="Familias" icon={MessageCircle} />
                <NavButton id="galeria" label="Galería" icon={Camera} />
             </div>
@@ -947,7 +979,7 @@ export default function PortfolioDocente() {
             <NavButton id="metodologia" label="Método" icon={BookOpen} />
             <NavButton id="materiales" label="Materiales" icon={Shapes} />
             <NavButton id="evaluacion" label="Evaluación" icon={LineChart} />
-            <NavButton id="calendario" label="Calendario" icon={Users} />
+            <NavButton id="calendario" label="Calendario" icon={Calendar} />
             <NavButton id="familias" label="Familias" icon={MessageCircle} />
             <NavButton id="galeria" label="Galería" icon={Camera} />
           </div>
