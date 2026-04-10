@@ -1149,8 +1149,10 @@ export default function PortfolioDocente() {
                   </div>
                 </div>
               </Reveal>
-              <Reveal delay={0.4}>
-                <div className="bg-slate-900 text-white p-8 sm:p-12 rounded-3xl shadow-md lg:col-span-3 relative overflow-hidden h-full mt-4">
+            </div>
+            
+            <Reveal delay={0.4}>
+              <div className="bg-slate-900 text-white p-8 sm:p-12 rounded-3xl shadow-md relative overflow-hidden mt-8">
                   <div className="absolute top-0 right-0 p-8 opacity-10"><BookOpen className="w-64 h-64" /></div>
                   <div className="relative z-10 max-w-4xl">
                     <h3 className="text-3xl font-extrabold text-amber-400 mb-8">Fundamentación Pedagógica y Curricular</h3>
@@ -1175,7 +1177,6 @@ export default function PortfolioDocente() {
                   </div>
                 </div>
               </Reveal>
-            </div>
           </div>
         )}
 
