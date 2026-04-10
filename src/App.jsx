@@ -472,6 +472,7 @@ export default function PortfolioDocente() {
 
   // --- CALENDARIO ---
   const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [viewEvento, setViewEvento] = useState(null);
   const triggerEditEvento = (ev) => {
     setNewEvento({ titulo: ev.titulo, descripcion: ev.descripcion, fecha: ev.fecha, tipo: ev.tipo });
     setEditEventoId(ev.$id); setShowEventoForm(true);
@@ -542,8 +543,6 @@ export default function PortfolioDocente() {
         default:          return 'bg-slate-500 text-white';
       }
     };
-
-    const [viewEvento, setViewEvento] = useState(null);
 
     return (
       <div className="space-y-8 animate-in fade-in duration-500">
