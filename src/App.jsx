@@ -7,12 +7,14 @@ import { ThemeProvider } from './context/ThemeContext';
 import { ToastProvider } from './context/ToastContext';
 import { AuthProvider } from './context/AuthContext';
 import { DataProvider } from './context/DataContext';
+import { PresentationProvider, usePresentation } from './context/PresentationContext';
 
 // Components Core
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import LoginModal from './components/ui/LoginModal';
 import InstallWebAppBanner from './components/ui/InstallWebAppBanner';
+import PresentationOverlay from './components/ui/PresentationOverlay';
 import { Loader2 } from 'lucide-react';
 import OneSignal from 'react-onesignal';
 
@@ -71,6 +73,8 @@ const AnimatedRoutes = () => {
 };
 
 function AppContent() {
+  const { isPresenting } = usePresentation();
+
   useEffect(() => {
     const initOneSignal = async () => {
       try {
@@ -91,16 +95,25 @@ function AppContent() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-mesh-light font-sans transition-colors duration-500 antialiased selection:bg-indigo-500/30 overflow-x-hidden relative flex flex-col">
-      <Navbar />
+    <div className={`min-h-screen font-sans transition-colors duration-500 antialiased selection:bg-indigo-500/30 overflow-x-hidden relative flex flex-col ${isPresenting ? 'bg-[#05070A] cursor-none' : 'bg-mesh-light'}`}>
+      <AnimatePresence>
+        {!isPresenting && (
+          <motion.div initial={{ y: -100 }} animate={{ y: 0 }} exit={{ y: -100 }} transition={{ duration: 0.5 }} className="fixed top-0 left-0 right-0 z-50 pointer-events-none">
+             <div className="pointer-events-auto">
+               <Navbar />
+             </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
       
-      <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-16 flex flex-col">
+      <main className={`flex-1 w-full transition-all duration-700 mx-auto px-4 sm:px-6 lg:px-8 flex flex-col ${isPresenting ? 'py-0 max-w-none' : 'py-8 md:py-16 pt-32 max-w-7xl'}`}>
         <AnimatedRoutes />
       </main>
 
-      <Footer />
+      {!isPresenting && <Footer />}
       <LoginModal />
-      <InstallWebAppBanner />
+      {!isPresenting && <InstallWebAppBanner />}
+      <PresentationOverlay />
     </div>
   );
 }
@@ -111,9 +124,11 @@ export default function App() {
       <AuthProvider>
         <ToastProvider>
           <DataProvider>
-            <Router>
-               <AppContent />
-            </Router>
+            <PresentationProvider>
+              <Router>
+                 <AppContent />
+              </Router>
+            </PresentationProvider>
           </DataProvider>
         </ToastProvider>
       </AuthProvider>

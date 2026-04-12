@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { NavLink, Link, useLocation } from 'react-router-dom';
 import { 
   Home, BookOpen, Shapes, LineChart, Calendar, MessageCircle, Camera, Briefcase,
-  Star, Sun, Moon, Lock, Unlock, Menu, X
+  Star, Sun, Moon, Lock, Unlock, Menu, X, Monitor
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
+import { usePresentation } from '../../context/PresentationContext';
 
 const NavItem = ({ to, label, icon: Icon, onClick }) => (
   <NavLink
@@ -24,6 +25,7 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const { isAdmin, logout, setShowLoginModal } = useAuth();
   const { darkMode, setDarkMode } = useTheme();
+  const { togglePresentation } = usePresentation();
   const location = useLocation();
 
   useEffect(() => {
@@ -58,6 +60,9 @@ export default function Navbar() {
           <div className="flex items-center gap-2">
              <button onClick={() => setDarkMode(!darkMode)} className="p-2 text-slate-500 hover:bg-white/50 dark:hover:bg-slate-800/50 hover:text-indigo-600 dark:hover:text-indigo-400 rounded-xl transition-all border border-transparent flex items-center justify-center">
                 {darkMode ? <Sun className="w-5 h-5 text-amber-500" /> : <Moon className="w-5 h-5" />}
+             </button>
+             <button onClick={togglePresentation} className="p-2 text-slate-500 hover:bg-white/50 dark:hover:bg-slate-800/50 hover:text-indigo-600 dark:hover:text-indigo-400 rounded-xl transition-all border border-transparent flex items-center justify-center group" title="Modo Presentación">
+                <Monitor className="w-5 h-5 group-hover:scale-110 transition-transform" />
              </button>
              {isAdmin ? (
                 <button onClick={logout} className="p-2 sm:px-4 sm:py-2 text-emerald-600 dark:text-emerald-400 bg-emerald-50/50 dark:bg-emerald-900/20 hover:bg-emerald-100 dark:hover:bg-emerald-900/40 rounded-xl font-bold transition-colors flex items-center gap-2">
