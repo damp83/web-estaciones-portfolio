@@ -139,17 +139,5 @@
 .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 
 /* Presentation Mode Custom Styles */
-.cursor-none {
-  cursor: none !important;
-}
 
-.cursor-none * {
-  cursor: none !important;
-}
-
-@media (max-width: 640px) {
-  .cursor-none {
-    cursor: auto !important;
-  }
-}
 

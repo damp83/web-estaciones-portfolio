@@ -95,7 +95,7 @@ function AppContent() {
   }, []);
 
   return (
-    <div className={`min-h-screen font-sans transition-colors duration-500 antialiased selection:bg-indigo-500/30 overflow-x-hidden relative flex flex-col ${isPresenting ? 'bg-[#05070A] cursor-none' : 'bg-mesh-light'}`}>
+    <div className={`min-h-screen font-sans transition-colors duration-500 antialiased selection:bg-indigo-500/30 overflow-x-hidden relative flex flex-col ${isPresenting ? 'bg-[#05070A]' : 'bg-mesh-light'}`}>
       <AnimatePresence>
         {!isPresenting && (
           <motion.div initial={{ y: -100 }} animate={{ y: 0 }} exit={{ y: -100 }} transition={{ duration: 0.5 }} className="fixed top-0 left-0 right-0 z-50 pointer-events-none">
