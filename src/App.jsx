@@ -1,5 +1,6 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { AnimatePresence, motion } from 'framer-motion';
 
 // Providers
 import { ThemeProvider } from './context/ThemeContext';
@@ -22,13 +23,21 @@ import Calendario from './pages/Calendario';
 import Familias from './pages/Familias';
 import Galeria from './pages/Galeria';
 
-function AppContent() {
+// Animated Route Wrapper
+const AnimatedRoutes = () => {
+  const location = useLocation();
+  
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 font-sans transition-colors duration-300 antialiased selection:bg-indigo-500/30">
-      <Navbar />
-      
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 relative z-10 w-full animate-in fade-in zoom-in-95 duration-500 slide-in-from-bottom-4">
-        <Routes>
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={location.pathname}
+        initial={{ opacity: 0, y: 15 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -15 }}
+        transition={{ duration: 0.3, ease: 'easeOut' }}
+        className="w-full relative z-10"
+      >
+        <Routes location={location} key={location.pathname}>
           <Route path="/" element={<Inicio />} />
           <Route path="/trayectoria" element={<Trayectoria />} />
           <Route path="/metodologia" element={<Metodologia />} />
@@ -39,6 +48,18 @@ function AppContent() {
           <Route path="/galeria" element={<Galeria />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
+      </motion.div>
+    </AnimatePresence>
+  );
+};
+
+function AppContent() {
+  return (
+    <div className="min-h-screen bg-mesh-light dark:bg-mesh-dark font-sans transition-colors duration-500 antialiased selection:bg-indigo-500/30 overflow-x-hidden relative flex flex-col">
+      <Navbar />
+      
+      <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-16 flex flex-col">
+        <AnimatedRoutes />
       </main>
 
       <Footer />

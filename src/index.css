@@ -12,186 +12,58 @@
   h1, h2, h3, h4, h5, h6 {
     @apply font-heading tracking-tight;
   }
+  
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transition: background-color 0.3s ease;
+    @apply bg-slate-50 text-slate-900;
+  }
 }
 
-/* Quill Editor Fixes */
-.quill-editor .ql-container {
-  min-height: 200px;
-  max-height: 400px;
-  overflow-y: auto;
-  font-family: inherit;
-  font-size: 0.875rem;
-}
-
-.quill-editor .ql-toolbar {
-  border-top: none !important;
-  border-left: none !important;
-  border-right: none !important;
-  border-bottom: 1px solid #e2e8f0 !important;
-  background: #f8fafc;
-}
-
-.quill-editor .ql-container.ql-snow {
-  border: none !important;
-}
-
-/* Basic Typography for dangerouslySetInnerHTML */
-.prose ul {
-  list-style-type: disc;
-  padding-left: 1.5rem;
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
-}
-.prose ol {
-  list-style-type: decimal;
-  padding-left: 1.5rem;
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
-}
-.prose strong {
-  font-weight: 700;
-}
-.prose a {
-  color: #2563eb;
-  text-decoration: underline;
-}
-
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-/* Dark Mode Global Support */
+/* Base Body Dark Mode */
 .dark body {
-  background-color: #0f172a; /* slate-900 */
+  @apply bg-[#0B0F19]; /* slate-950/even darker for pure contrast */
 }
 
-/* Quill Editor Dark Mode */
-.dark .quill-editor .ql-toolbar {
-  background: #1e293b; /* slate-800 */
-  border-bottom: 1px solid #334155 !important; /* slate-700 */
+/* Advanced Mesh Gradient Background */
+.bg-mesh-light {
+  background-color: #f8fafc;
+  background-image: 
+    radial-gradient(at 0% 0%, hsla(253,16%,7%,0) 0, transparent 50%), 
+    radial-gradient(at 40% 20%, hsla(28,100%,74%,0.15) 0, transparent 50%), 
+    radial-gradient(at 80% 0%, hsla(189,100%,56%,0.15) 0, transparent 50%), 
+    radial-gradient(at 0% 50%, hsla(355,100%,93%,0) 0, transparent 50%), 
+    radial-gradient(at 80% 50%, hsla(340,100%,76%,0.05) 0, transparent 50%), 
+    radial-gradient(at 0% 100%, hsla(22,100%,77%,0.1) 0, transparent 50%), 
+    radial-gradient(at 80% 100%, hsla(242,100%,70%,0.15) 0, transparent 50%), 
+    radial-gradient(at 0% 0%, hsla(343,100%,76%,0) 0, transparent 50%);
+  background-attachment: fixed;
 }
 
-.dark .quill-editor .ql-toolbar .ql-stroke {
-  stroke: #cbd5e1; /* slate-300 */
+.dark .bg-mesh-dark {
+  background-color: #0b0f19;
+  background-image: 
+    radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
+    radial-gradient(at 40% 20%, hsla(28,100%,74%,0.04) 0, transparent 50%), 
+    radial-gradient(at 80% 0%, hsla(189,100%,56%,0.04) 0, transparent 50%), 
+    radial-gradient(at 0% 50%, hsla(355,100%,93%,0) 0, transparent 50%), 
+    radial-gradient(at 80% 50%, hsla(340,100%,76%,0.02) 0, transparent 50%), 
+    radial-gradient(at 0% 100%, hsla(22,100%,77%,0.03) 0, transparent 50%), 
+    radial-gradient(at 80% 100%, hsla(242,100%,70%,0.06) 0, transparent 50%), 
+    radial-gradient(at 0% 0%, hsla(343,100%,76%,0) 0, transparent 50%);
+  background-attachment: fixed;
 }
 
-.dark .quill-editor .ql-toolbar .ql-fill {
-  fill: #cbd5e1;
+/* Glassmorphism Premium Utilities */
+.glass-panel {
+  @apply bg-white/70 dark:bg-slate-900/60 backdrop-blur-xl border border-white/40 dark:border-white/5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.1)];
+}
+.glass-pill {
+  @apply bg-white/80 dark:bg-slate-900/80 backdrop-blur-2xl border border-white/50 dark:border-white/10 shadow-lg shadow-indigo-500/5;
 }
 
-.dark .quill-editor .ql-toolbar .ql-picker {
-  color: #cbd5e1;
-}
-
-.dark .quill-editor .ql-container {
-  background: #0f172a; /* slate-900 */
-  color: #f1f5f9; /* slate-100 */
-}
-
-.dark .ql-snow.ql-toolbar button:hover, 
-.dark .ql-snow .ql-toolbar button:hover, 
-.dark .ql-snow.ql-toolbar button:focus, 
-.dark .ql-snow .ql-toolbar button:focus, 
-.dark .ql-snow.ql-toolbar button.ql-active, 
-.dark .ql-snow .ql-toolbar button.ql-active, 
-.dark .ql-snow.ql-toolbar .ql-picker-label:hover, 
-.dark .ql-snow .ql-toolbar .ql-picker-label:hover, 
-.dark .ql-snow.ql-toolbar .ql-picker-label.ql-active, 
-.dark .ql-snow .ql-toolbar .ql-picker-label.ql-active, 
-.dark .ql-snow.ql-toolbar .ql-picker-item:hover, 
-.dark .ql-snow .ql-toolbar .ql-picker-item:hover, 
-.dark .ql-snow.ql-toolbar .ql-picker-item.ql-selected, 
-.dark .ql-snow .ql-toolbar .ql-picker-item.ql-selected {
-  color: #818cf8; /* indigo-400 */
-}
-
-.dark .ql-snow.ql-toolbar button:hover .ql-stroke, 
-.dark .ql-snow .ql-toolbar button:hover .ql-stroke, 
-.dark .ql-snow.ql-toolbar button.ql-active .ql-stroke, 
-.dark .ql-snow .ql-toolbar button.ql-active .ql-stroke {
-  stroke: #818cf8;
-}
-
-body {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  transition: background-color 0.3s ease;
-}
-
-/* Animaciones Tailwind que usamos manualmente */
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-@keyframes slideInFromTop {
-  from { opacity: 0; transform: translateY(-16px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-@keyframes zoomIn95 {
-  from { opacity: 0; transform: scale(0.95); }
-  to   { opacity: 1; transform: scale(1); }
-}
-
-.animate-in { animation-fill-mode: both; }
-.fade-in    { animation-name: fadeIn; }
-.zoom-in-95 { animation-name: zoomIn95; }
-.slide-in-from-top-4 { animation-name: slideInFromTop; }
-.duration-200 { animation-duration: 200ms; }
-.duration-300 { animation-duration: 300ms; }
-.duration-500 { animation-duration: 500ms; }
-
-/* Ocultar scrollbar en filtros horizontales */
-.scrollbar-hide::-webkit-scrollbar { display: none; }
-.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
-
-/* Custom Scrollbar Premium */
-::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
-}
-::-webkit-scrollbar-track {
-  background: transparent; 
-}
-::-webkit-scrollbar-thumb {
-  background-color: #cbd5e1; /* slate-300 */
-  border-radius: 20px;
-  border: 3px solid transparent; /* fake padding */
-  background-clip: padding-box;
-}
-::-webkit-scrollbar-thumb:hover {
-  background-color: #818cf8; /* indigo-400 */
-}
-.dark ::-webkit-scrollbar-thumb {
-  background-color: #334155; /* slate-700 */
-}
-.dark ::-webkit-scrollbar-thumb:hover {
-  background-color: #6366f1; /* indigo-500 */
-}
-
-/* Fondos Orgánicos (Dot Grid y Blobs) */
-.bg-grid-slate-200 {
-  background-image: radial-gradient(#e2e8f0 1.5px, transparent 1.5px);
-  background-size: 32px 32px;
-}
-.dark .bg-grid-slate-800 {
-  background-image: radial-gradient(#1e293b 1.5px, transparent 1.5px);
-  background-size: 32px 32px;
-}
-
-.blob {
-  position: absolute;
-  filter: blur(80px);
-  z-index: 0;
-  opacity: 0.5;
-  border-radius: 50%;
-  animation: float 12s ease-in-out infinite;
-  pointer-events: none;
-}
-.blob-indigo { background: #6366f1; }
-.blob-emerald { background: #10b981; }
-
+/* Animaciones */
 @keyframes float {
   0%   { transform: translateY(0px) scale(1); }
   33%  { transform: translateY(-40px) scale(1.1); }
@@ -199,25 +71,65 @@ body {
   100% { transform: translateY(0px) scale(1); }
 }
 
-/* Hover Animado Mágico (Underline que crece del centro) */
-.hover-underline-magic {
-  position: relative;
-  text-decoration: none;
+@keyframes blob {
+  0% { transform: translate(0px, 0px) scale(1); }
+  33% { transform: translate(30px, -50px) scale(1.1); }
+  66% { transform: translate(-20px, 20px) scale(0.9); }
+  100% { transform: translate(0px, 0px) scale(1); }
 }
-.hover-underline-magic::after {
-  content: '';
-  position: absolute;
-  width: 100%;
-  transform: scaleX(0);
-  height: 3px;
-  bottom: -6px;
-  left: 0;
-  background-color: currentColor;
-  transform-origin: bottom center;
-  transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  border-radius: 4px;
+
+.animate-blob {
+  animation: blob 7s infinite;
 }
-.hover-underline-magic:hover::after,
-.hover-underline-magic.active::after {
-  transform: scaleX(1);
+.animation-delay-2000 {
+  animation-delay: 2s;
 }
+.animation-delay-4000 {
+  animation-delay: 4s;
+}
+
+/* QUILL EDITOR STYLES RE-IMPLEMENTED FOR DARK MODE AND NO BORDERS */
+.quill-editor .ql-container {
+  min-height: 200px; max-height: 400px; overflow-y: auto; font-family: inherit; font-size: 0.875rem;
+}
+.quill-editor .ql-toolbar {
+  border-top: none !important; border-left: none !important; border-right: none !important;
+  border-bottom: 1px solid #e2e8f0 !important; background: #f8fafc; border-top-left-radius: 0.5rem; border-top-right-radius: 0.5rem;
+}
+.quill-editor .ql-container.ql-snow { border: none !important; }
+
+/* Dark mode Quill */
+.dark .quill-editor .ql-toolbar {
+  background: #1e293b; border-bottom: 1px solid #334155 !important;
+}
+.dark .quill-editor .ql-toolbar .ql-stroke { stroke: #cbd5e1; }
+.dark .quill-editor .ql-toolbar .ql-fill { fill: #cbd5e1; }
+.dark .quill-editor .ql-toolbar .ql-picker { color: #cbd5e1; }
+.dark .quill-editor .ql-container { background: transparent; color: #f1f5f9; }
+.dark .ql-snow.ql-toolbar button:hover, .dark .ql-snow .ql-toolbar button:hover, 
+.dark .ql-snow.ql-toolbar button:focus, .dark .ql-snow .ql-toolbar button:focus, 
+.dark .ql-snow.ql-toolbar button.ql-active, .dark .ql-snow .ql-toolbar button.ql-active, 
+.dark .ql-snow.ql-toolbar .ql-picker-label:hover, .dark .ql-snow .ql-toolbar .ql-picker-label:hover, 
+.dark .ql-snow.ql-toolbar .ql-picker-label.ql-active, .dark .ql-snow .ql-toolbar .ql-picker-label.ql-active, 
+.dark .ql-snow.ql-toolbar .ql-picker-item:hover, .dark .ql-snow .ql-toolbar .ql-picker-item:hover, 
+.dark .ql-snow.ql-toolbar .ql-picker-item.ql-selected, .dark .ql-snow .ql-toolbar .ql-picker-item.ql-selected {
+  color: #818cf8;
+}
+.dark .ql-snow.ql-toolbar button:hover .ql-stroke, .dark .ql-snow .ql-toolbar button:hover .ql-stroke, 
+.dark .ql-snow.ql-toolbar button.ql-active .ql-stroke, .dark .ql-snow .ql-toolbar button.ql-active .ql-stroke {
+  stroke: #818cf8;
+}
+
+/* Custom Scrollbar Premium */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1; border-radius: 20px; border: 3px solid transparent; background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover { background-color: #818cf8; }
+.dark ::-webkit-scrollbar-thumb { background-color: #334155; }
+.dark ::-webkit-scrollbar-thumb:hover { background-color: #6366f1; }
+
+/* Ocultar scrollbar en filtros horizontales */
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
