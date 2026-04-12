@@ -14,7 +14,7 @@ const NavItem = ({ to, label, icon: Icon, onClick }) => (
     className={({ isActive }) => `flex items-center gap-2 px-3 py-2 rounded-xl transition-all duration-300 font-bold group
       ${isActive ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/20' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100/50 dark:hover:bg-slate-800/50 hover:text-indigo-600 dark:hover:text-indigo-400'}`}
   >
-    <Icon className={`w-4 h-4 transition-transform ${!isActive && 'group-hover:scale-110'}`} />
+    <Icon className="w-4 h-4 transition-transform group-hover:scale-110" />
     <span className="text-sm">{label}</span>
   </NavLink>
 );
