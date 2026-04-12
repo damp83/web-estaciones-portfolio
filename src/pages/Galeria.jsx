@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { Reveal } from '../components/Reveal';
 import { Plus, X, Loader2, Camera, Trash2, Edit, Minimize2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
@@ -28,11 +28,11 @@ export default function Galeria() {
 
   const handleDelete = async (id) => {
     setConfirmDialog({
-      message: '¿Eliminar esta foto?',
+      message: 'Â¿Eliminar esta foto?',
       onConfirm: async () => {
         try {
           const doc = fotos.find(f => f.$id === id);
-          if (doc && doc.archivoUrl) await deleteFileFromUrl(doc.archivoUrl);
+          if (doc && doc.imagenUrl) await deleteFileFromUrl(doc.imagenUrl);
           await databases.deleteDocument(APPWRITE_DB, COL_GALERIA, id);
           setFotos(fotos.filter(f => f.$id !== id));
           addToast('Foto eliminada', 'success');
@@ -55,13 +55,13 @@ export default function Galeria() {
       
       const data = {
         titulo: formData.titulo,
-        ...(fileUrl && { archivoUrl: fileUrl })
+        ...(fileUrl && { imagenUrl: fileUrl })
       };
       
       if (editId) {
         if (!fileUrl) {
            const current = fotos.find(f => f.$id === editId);
-           if(current) data.archivoUrl = current.archivoUrl;
+           if(current) data.imagenUrl = current.imagenUrl;
         }
         const upd = await databases.updateDocument(APPWRITE_DB, COL_GALERIA, editId, data);
         setFotos(fotos.map(f => f.$id === editId ? upd : f));
@@ -86,8 +86,8 @@ export default function Galeria() {
       <Reveal>
         <div className="flex justify-between items-start sm:items-center gap-4 mb-4">
           <div>
-            <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white">Galería de Imágenes</h2>
-            <p className="text-slate-600 dark:text-slate-400 mt-2 text-lg">Para que podáis ver un pedacito de nuestro día a día.</p>
+            <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white">GalerÃ­a de ImÃ¡genes</h2>
+            <p className="text-slate-600 dark:text-slate-400 mt-2 text-lg">Para que podÃ¡is ver un pedacito de nuestro dÃ­a a dÃ­a.</p>
           </div>
           {isAdmin && (
             <button onClick={() => setShowForm(true)} className="bg-indigo-600 text-white px-5 py-2.5 rounded-xl font-bold hover:bg-indigo-700 transition-colors flex items-center gap-2 shadow-md">
@@ -103,7 +103,7 @@ export default function Galeria() {
           <h3 className="text-xl font-bold text-slate-800 dark:text-white mb-4">{editId ? 'Editar Foto' : 'Subir Nueva Foto'}</h3>
           <div className="space-y-4 mb-4">
             <div>
-              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1">Título / Pie de foto</label>
+              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1">TÃ­tulo / Pie de foto</label>
               <input type="text" required value={formData.titulo} onChange={e => setFormData({...formData, titulo: e.target.value})} className="w-full border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-lg p-2.5 focus:ring-2 focus:ring-indigo-500" />
             </div>
             <div>
@@ -130,14 +130,14 @@ export default function Galeria() {
       ) : fotos.length === 0 && !showForm ? (
         <div className="text-center py-16 bg-slate-100 dark:bg-slate-800/50 rounded-2xl border border-slate-200 dark:border-slate-700">
           <Camera className="w-12 h-12 text-slate-400 mx-auto mb-3" />
-          <p className="text-slate-500">Aún no hay fotos en la galería.</p>
+          <p className="text-slate-500">AÃºn no hay fotos en la galerÃ­a.</p>
         </div>
       ) : (
         <div className="columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">
           {fotos.map((foto, index) => (
             <Reveal key={foto.$id} delay={0.05 * (index % 8)}>
               <div className="relative group rounded-2xl overflow-hidden cursor-zoom-in break-inside-avoid bg-slate-200 dark:bg-slate-800 mb-4 shadow-sm" onClick={() => setLightboxIndex(index)}>
-                <img loading="lazy" src={getOptimizedUrl(foto.archivoUrl, 400)} alt={foto.titulo || "Foto"} className="w-full h-auto object-cover transform group-hover:scale-105 transition-transform duration-500" />
+                <img loading="lazy" src={getOptimizedUrl(foto.imagenUrl, 400)} alt={foto.titulo || "Foto"} className="w-full h-auto object-cover transform group-hover:scale-105 transition-transform duration-500" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   <div className="absolute bottom-0 left-0 right-0 p-4">
                     <p className="text-white font-bold text-sm leading-tight drop-shadow-md">{foto.titulo}</p>
@@ -162,7 +162,7 @@ export default function Galeria() {
            <button onClick={() => setLightboxIndex(null)} className="absolute top-4 right-4 sm:top-6 sm:right-6 text-white/50 hover:text-white bg-white/10 hover:bg-white/20 p-2 sm:p-3 rounded-full transition-all z-10"><Minimize2 className="w-6 h-6 sm:w-8 sm:h-8" /></button>
            <button onClick={(e) => { e.stopPropagation(); setLightboxIndex(prev => prev > 0 ? prev - 1 : fotos.length - 1); }} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/50 hover:text-white bg-white/10 hover:bg-white/20 p-2 sm:p-4 rounded-full transition-all z-10"><ChevronLeft className="w-6 h-6 sm:w-8 sm:h-8" /></button>
            <button onClick={(e) => { e.stopPropagation(); setLightboxIndex(prev => prev < fotos.length - 1 ? prev + 1 : 0); }} className="absolute right-4 top-1/2 -translate-y-1/2 text-white/50 hover:text-white bg-white/10 hover:bg-white/20 p-2 sm:p-4 rounded-full transition-all z-10"><ChevronRight className="w-6 h-6 sm:w-8 sm:h-8" /></button>
-           <div className="w-full h-full p-4 sm:p-12 pb-24 flex items-center justify-center relative"><img src={getOptimizedUrl(fotos[lightboxIndex].archivoUrl, 1600)} alt="Ampliación" className="max-w-full max-h-full object-contain rounded-lg sm:rounded-2xl shadow-2xl animate-in zoom-in-95 duration-300" /></div>
+           <div className="w-full h-full p-4 sm:p-12 pb-24 flex items-center justify-center relative"><img src={getOptimizedUrl(fotos[lightboxIndex].imagenUrl, 1600)} alt="AmpliaciÃ³n" className="max-w-full max-h-full object-contain rounded-lg sm:rounded-2xl shadow-2xl animate-in zoom-in-95 duration-300" /></div>
            <div className="absolute bottom-0 inset-x-0 p-6 sm:p-8 bg-gradient-to-t from-black/80 to-transparent flex flex-col items-center justify-center">
              <h3 className="text-white text-lg sm:text-2xl font-bold mb-2 text-center max-w-3xl drop-shadow-lg">{fotos[lightboxIndex].titulo}</h3>
              <p className="text-white/50 text-xs sm:text-sm tracking-widest font-bold uppercase">{lightboxIndex + 1} de {fotos.length}</p>
