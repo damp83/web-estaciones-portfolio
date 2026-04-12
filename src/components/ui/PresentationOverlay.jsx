@@ -155,12 +155,12 @@ export default function PresentationOverlay() {
 
         {/* Bottom Bar: High Contrast Label */}
         <div className="z-10 text-center pb-4">
-           <p className="text-slate-300 font-black tracking-[0.6em] text-sm sm:text-base uppercase flex items-center justify-center gap-4 opacity-80 mt-8">
+           <div className="text-slate-300 font-black tracking-[0.6em] text-sm sm:text-base uppercase flex items-center justify-center gap-4 opacity-80 mt-8">
              <div className="h-px w-20 bg-slate-800"></div>
              <Hourglass className="w-6 h-6 text-indigo-500" /> 
              Modo Aula Dinámica • Inmersivo 
              <div className="h-px w-20 bg-slate-800"></div>
-           </p>
+           </div>
         </div>
 
       </div>
