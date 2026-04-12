@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense, lazy, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 
@@ -14,6 +14,7 @@ import Footer from './components/layout/Footer';
 import LoginModal from './components/ui/LoginModal';
 import InstallWebAppBanner from './components/ui/InstallWebAppBanner';
 import { Loader2 } from 'lucide-react';
+import OneSignal from 'react-onesignal';
 
 // Lazy Loaded Pages (Code Splitting)
 const Inicio = lazy(() => import('./pages/Inicio'));
@@ -70,6 +71,25 @@ const AnimatedRoutes = () => {
 };
 
 function AppContent() {
+  useEffect(() => {
+    const initOneSignal = async () => {
+      try {
+        await OneSignal.init({
+          appId: "9a560765-cebf-4a18-a541-005169a8e213",
+          allowLocalhostAsSecureOrigin: true,
+          notifyButton: {
+            enable: true,
+            displayPredicate: () => OneSignal.isPushNotificationsSupported(),
+          },
+        });
+        OneSignal.Slidedown.promptPush();
+      } catch (error) {
+        console.error('OneSignal initialization failed:', error);
+      }
+    };
+    initOneSignal();
+  }, []);
+
   return (
     <div className="min-h-screen bg-mesh-light font-sans transition-colors duration-500 antialiased selection:bg-indigo-500/30 overflow-x-hidden relative flex flex-col">
       <Navbar />
