@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 
@@ -8,20 +8,34 @@ import { ToastProvider } from './context/ToastContext';
 import { AuthProvider } from './context/AuthContext';
 import { DataProvider } from './context/DataContext';
 
-// Components
+// Components Core
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import LoginModal from './components/ui/LoginModal';
+import InstallWebAppBanner from './components/ui/InstallWebAppBanner';
+import { Loader2 } from 'lucide-react';
 
-// Pages
-import Inicio from './pages/Inicio';
-import Trayectoria from './pages/Trayectoria';
-import Metodologia from './pages/Metodologia';
-import Materiales from './pages/Materiales';
-import Evaluacion from './pages/Evaluacion';
-import Calendario from './pages/Calendario';
-import Familias from './pages/Familias';
-import Galeria from './pages/Galeria';
+// Lazy Loaded Pages (Code Splitting)
+const Inicio = lazy(() => import('./pages/Inicio'));
+const Trayectoria = lazy(() => import('./pages/Trayectoria'));
+const Metodologia = lazy(() => import('./pages/Metodologia'));
+const Materiales = lazy(() => import('./pages/Materiales'));
+const Evaluacion = lazy(() => import('./pages/Evaluacion'));
+const Calendario = lazy(() => import('./pages/Calendario'));
+const Familias = lazy(() => import('./pages/Familias'));
+const Galeria = lazy(() => import('./pages/Galeria'));
+
+// Elegant Lazy Loading Fallback
+const LoadingFallback = () => (
+  <div className="w-full flex items-center justify-center p-20 min-h-[50vh]">
+    <div className="flex flex-col items-center gap-4 animate-pulse">
+      <div className="p-4 bg-indigo-50 dark:bg-slate-800 rounded-full">
+         <Loader2 className="w-8 h-8 text-indigo-600 dark:text-indigo-400 animate-spin" />
+      </div>
+      <p className="font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest text-sm">Cargando...</p>
+    </div>
+  </div>
+);
 
 // Animated Route Wrapper
 const AnimatedRoutes = () => {
@@ -37,17 +51,19 @@ const AnimatedRoutes = () => {
         transition={{ duration: 0.3, ease: 'easeOut' }}
         className="w-full relative z-10"
       >
-        <Routes location={location} key={location.pathname}>
-          <Route path="/" element={<Inicio />} />
-          <Route path="/trayectoria" element={<Trayectoria />} />
-          <Route path="/metodologia" element={<Metodologia />} />
-          <Route path="/materiales" element={<Materiales />} />
-          <Route path="/evaluacion" element={<Evaluacion />} />
-          <Route path="/calendario" element={<Calendario />} />
-          <Route path="/familias" element={<Familias />} />
-          <Route path="/galeria" element={<Galeria />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
+        <Suspense fallback={<LoadingFallback />}>
+          <Routes location={location} key={location.pathname}>
+            <Route path="/" element={<Inicio />} />
+            <Route path="/trayectoria" element={<Trayectoria />} />
+            <Route path="/metodologia" element={<Metodologia />} />
+            <Route path="/materiales" element={<Materiales />} />
+            <Route path="/evaluacion" element={<Evaluacion />} />
+            <Route path="/calendario" element={<Calendario />} />
+            <Route path="/familias" element={<Familias />} />
+            <Route path="/galeria" element={<Galeria />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </Suspense>
       </motion.div>
     </AnimatePresence>
   );
@@ -55,7 +71,7 @@ const AnimatedRoutes = () => {
 
 function AppContent() {
   return (
-    <div className="min-h-screen bg-mesh-light dark:bg-mesh-dark font-sans transition-colors duration-500 antialiased selection:bg-indigo-500/30 overflow-x-hidden relative flex flex-col">
+    <div className="min-h-screen bg-mesh-light font-sans transition-colors duration-500 antialiased selection:bg-indigo-500/30 overflow-x-hidden relative flex flex-col">
       <Navbar />
       
       <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-16 flex flex-col">
@@ -64,6 +80,7 @@ function AppContent() {
 
       <Footer />
       <LoginModal />
+      <InstallWebAppBanner />
     </div>
   );
 }
