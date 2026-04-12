@@ -59,7 +59,7 @@ export default function Navbar() {
                    <Star className="w-6 h-6 text-white" />
                  </div>
                  <div>
-                   <h1 className="text-xl font-black text-slate-800 dark:text-white tracking-tight leading-none mb-0.5">Mi Aula Dinámica</h1>
+                   <span className="text-xl block font-black text-slate-800 dark:text-white tracking-tight leading-none mb-0.5">Mi Aula Dinámica</span>
                    <p className="text-[10px] font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest flex items-center gap-1.5">
                      1º Ciclo <span className="w-1 h-1 rounded-full bg-slate-300 dark:bg-slate-600"></span> La Arboleda
                    </p>

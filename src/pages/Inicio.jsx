@@ -29,13 +29,13 @@ export default function Inicio() {
                 </div>
               )}
               
-              <h2 className="text-5xl sm:text-6xl xl:text-7xl font-black text-slate-800 dark:text-white leading-[1.1] tracking-tight">
+              <h1 className="text-5xl sm:text-6xl xl:text-7xl font-black text-slate-800 dark:text-white leading-[1.1] tracking-tight">
                 Aprender a través de <br className="hidden sm:block"/>
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-500 dark:from-indigo-400 dark:to-purple-400 relative inline-block group">
                   Estaciones
                   <motion.span className="absolute -bottom-2 left-0 w-full h-2 bg-amber-400/80 rounded-full" layoutId="underline" initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ delay: 0.5, duration: 0.8 }} style={{ transformOrigin: "left" }}></motion.span>
                 </span>
-              </h2>
+              </h1>
               
               <p className="text-lg sm:text-xl text-slate-600 dark:text-slate-400 max-w-2xl leading-relaxed mx-auto lg:mx-0 font-medium">
                 Bienvenidos al cuaderno de bitácora de mi aula. Un espacio donde transformamos el aprendizaje para que ningún niño se quede atrás y cada uno encuentre su camino al éxito en el Primer Ciclo.
@@ -97,6 +97,37 @@ export default function Inicio() {
             </div>
           </div>
         </div>
+      </Reveal>
+
+      {/* SEO Content Section: Nuestra Misión en el CEIP La Arboleda */}
+      <Reveal delay={0.3}>
+        <section className="pt-16 lg:pt-24 border-t border-slate-200 dark:border-slate-800">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+            <div className="space-y-6">
+              <h2 className="text-3xl sm:text-4xl font-black text-slate-800 dark:text-white">Nuestro Compromiso Educativo</h2>
+              <div className="h-1.5 w-20 bg-indigo-600 rounded-full"></div>
+              <p className="text-lg text-slate-600 dark:text-slate-400 font-medium leading-relaxed">
+                En el <strong className="text-indigo-600 dark:text-indigo-400">CEIP La Arboleda</strong>, entendemos que cada niño y niña es único, con ritmos de aprendizaje y curiosidades propias. Por eso, nace <strong className="text-indigo-600 dark:text-indigo-400">Mi Aula Dinámica</strong>, una iniciativa diseñada específicamente para el <strong className="text-indigo-600 dark:text-indigo-400">Primer Ciclo de Primaria</strong> que busca romper con la educación tradicional y lineal. 
+              </p>
+              <p className="text-lg text-slate-600 dark:text-slate-400 font-medium leading-relaxed">
+                Nuestra metodología se sustenta en el aprendizaje por estaciones, una forma de organizar el aula que permite el trabajo simultáneo en diferentes áreas del conocimiento mediante materiales manipulativos, experimentación directa y retos adaptados.
+              </p>
+            </div>
+            
+            <div className="glass-panel p-8 sm:p-10 rounded-[2.5rem] space-y-6 relative overflow-hidden">
+               <div className="absolute -top-10 -right-10 w-40 h-40 bg-indigo-500/10 rounded-full blur-3xl"></div>
+               <h3 className="text-2xl font-bold text-slate-800 dark:text-white flex items-center gap-3">
+                 <Sparkles className="w-6 h-6 text-indigo-500" /> Filosofía del Proyecto
+               </h3>
+               <p className="text-slate-600 dark:text-slate-400 leading-relaxed italic">
+                 "El corazón de este proyecto es la inclusión real. Aplicamos los principios del Diseño Universal para el Aprendizaje (DUA) para asegurar que todos los materiales sean accesibles y motivadores, sin importar el punto de partida de cada alumno."
+               </p>
+               <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
+                  En <strong className="text-indigo-600 dark:text-indigo-400">Mi Aula Dinámica</strong>, fomentamos la autonomía y el liderazgo compartido, convirtiendo al alumnado en el gestor de su propio proceso educativo. El centro se convierte así en un entorno de exploración donde el error es parte del aprendizaje y la curiosidad el motor principal del día a día.
+               </p>
+            </div>
+          </div>
+        </section>
       </Reveal>
     </div>
   );
