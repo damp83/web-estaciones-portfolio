@@ -19,7 +19,7 @@ export default function Familias() {
   const [formData, setFormData] = useState({ titulo: '', mensaje: '', esImportante: false });
 
   const triggerEdit = (com) => {
-    setFormData({ titulo: com.titulo, mensaje: com.mensaje, esImportante: com.esImportante });
+    setFormData({ titulo: com.titulo, mensaje: com.descripcion || '', esImportante: com.tipo === 'Importante' });
     setEditId(com.$id); setShowForm(true);
   };
 
@@ -44,8 +44,8 @@ export default function Familias() {
     try {
       const data = {
         titulo: formData.titulo,
-        mensaje: formData.mensaje,
-        esImportante: formData.esImportante,
+        descripcion: formData.mensaje,
+        tipo: formData.esImportante ? 'Importante' : 'Consejo',
       };
       if (editId) {
         const upd = await databases.updateDocument(APPWRITE_DB, COL_FAMILIAS, editId, data);
@@ -119,7 +119,7 @@ export default function Familias() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {comunicados.map((com, idx) => (
             <Reveal key={com.$id} delay={0.1 * (idx % 4)}>
-              <div className={`p-6 rounded-2xl shadow-sm border flex flex-col relative group hover:-translate-y-1 transition-all h-full ${com.esImportante ? 'bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-800 hover:shadow-amber-500/10' : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 hover:shadow-indigo-500/5'}`}>
+              <div className={`p-6 rounded-2xl shadow-sm border flex flex-col relative group hover:-translate-y-1 transition-all h-full ${(com.tipo === 'Importante') ? 'bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-800 hover:shadow-amber-500/10' : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 hover:shadow-indigo-500/5'}`}>
               {isAdmin && (
                 <div className="absolute top-3 right-3 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                   <button onClick={() => triggerEdit(com)} className="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900 rounded-md transition-colors"><Edit className="w-4 h-4" /></button>
@@ -127,13 +127,13 @@ export default function Familias() {
                 </div>
               )}
               <div className="flex items-start gap-3 mb-4 pr-16">
-                {com.esImportante ? <AlertCircle className="w-6 h-6 text-amber-500 shrink-0" /> : <MessageCircle className="w-6 h-6 text-indigo-500 shrink-0" />}
+                {(com.tipo === 'Importante') ? <AlertCircle className="w-6 h-6 text-amber-500 shrink-0" /> : <MessageCircle className="w-6 h-6 text-indigo-500 shrink-0" />}
                 <div>
-                  <h3 className={`font-bold text-lg ${com.esImportante ? 'text-amber-900 dark:text-amber-400' : 'text-slate-800 dark:text-white'}`}>{com.titulo}</h3>
+                  <h3 className={`font-bold text-lg ${(com.tipo === 'Importante') ? 'text-amber-900 dark:text-amber-400' : 'text-slate-800 dark:text-white'}`}>{com.titulo}</h3>
                   {com.$createdAt && <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">{new Date(com.$createdAt).toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' })}</span>}
                 </div>
               </div>
-              <p className={`whitespace-pre-wrap flex-1 ${com.esImportante ? 'text-amber-800 dark:text-amber-200 font-medium' : 'text-slate-600 dark:text-slate-400'}`}>{com.mensaje}</p>
+              <p className={`whitespace-pre-wrap flex-1 ${(com.tipo === 'Importante') ? 'text-amber-800 dark:text-amber-200 font-medium' : 'text-slate-600 dark:text-slate-400'}`}>{com.descripcion}</p>
             </div>
             </Reveal>
           ))}
