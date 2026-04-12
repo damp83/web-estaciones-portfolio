@@ -96,17 +96,9 @@ function AppContent() {
 
   return (
     <div className={`min-h-screen font-sans transition-colors duration-500 antialiased selection:bg-indigo-500/30 overflow-x-hidden relative flex flex-col ${isPresenting ? 'bg-[#05070A]' : 'bg-mesh-light'}`}>
-      <AnimatePresence>
-        {!isPresenting && (
-          <motion.div initial={{ y: -100 }} animate={{ y: 0 }} exit={{ y: -100 }} transition={{ duration: 0.5 }} className="fixed top-0 left-0 right-0 z-50 pointer-events-none">
-             <div className="pointer-events-auto">
-               <Navbar />
-             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <Navbar />
       
-      <main className={`flex-1 w-full transition-all duration-700 mx-auto px-4 sm:px-6 lg:px-8 flex flex-col ${isPresenting ? 'py-0 max-w-none' : 'py-8 md:py-16 pt-32 max-w-7xl'}`}>
+      <main className={`flex-1 w-full transition-all duration-700 mx-auto px-4 sm:px-6 lg:px-8 flex flex-col ${isPresenting ? 'py-0 max-w-none' : 'py-8 md:py-16 max-w-7xl'}`}>
         <AnimatedRoutes />
       </main>
 
